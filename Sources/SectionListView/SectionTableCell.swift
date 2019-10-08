@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SectionTableCell: UITableViewCell {
+public class SectionTableCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

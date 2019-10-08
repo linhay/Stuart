@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol SectionTableType {
+public protocol SectionTableType {
 
     var index: Int { set get }
 

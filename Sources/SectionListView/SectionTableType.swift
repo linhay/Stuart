@@ -9,41 +9,41 @@
 import UIKit
 
 public protocol SectionTableType {
-
+    
     var index: Int { set get }
-
+    
     var sectionController: SectionTableViewController { get }
     var tableView: UITableView { get }
-
+    
     var itemCount: Int { get }
-
+    
     var itemHeights: [CGFloat] { get }
     var headerHeight: CGFloat { get }
     var footerHeight: CGFloat { get }
-
+    
     func cell(tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell
     var headerView: UITableViewHeaderFooterView? { get }
     var footerView: UITableViewHeaderFooterView? { get }
-
+    
     func didSelectItem(at index: Int)
     func refresh()
 }
 
 
 extension SectionTableType {
-
+    
     var tableView: UITableView { return sectionController.tableView }
     var headerView: UITableViewHeaderFooterView? { return nil }
     var footerView: UITableViewHeaderFooterView? { return nil }
-
+    
     var itemHeights: [CGFloat] {
         return [CGFloat](repeating: UITableView.automaticDimension, count: itemCount)
     }
-
+    
     var headerHeight: CGFloat {
         return UITableView.automaticDimension
     }
-
+    
     var footerHeight: CGFloat {
         if footerView == nil {
             return 0.01
@@ -51,13 +51,13 @@ extension SectionTableType {
             return UITableView.automaticDimension
         }
     }
-
+    
     func didSelectItem(at index: Int) { }
-
+    
     func refresh() {
         UIView.performWithoutAnimation {
             tableView.reloadSections(IndexSet(arrayLiteral: index), with: .none)
         }
     }
-
+    
 }

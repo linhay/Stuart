@@ -28,7 +28,7 @@ public protocol SectionProtocol {
     func headerView(at indexPath: IndexPath) -> UICollectionReusableView?
     func footerView(at indexPath: IndexPath) -> UICollectionReusableView?
 
-    func refresh(complete: @escaping (Error?) -> Void)
+    func refresh()
 }
 
 public extension SectionProtocol {
@@ -52,7 +52,7 @@ public extension SectionProtocol {
     func headerView(at indexPath: IndexPath) -> UICollectionReusableView? { return nil }
     func footerView(at indexPath: IndexPath) -> UICollectionReusableView? { return nil }
 
-    func refresh(complete: @escaping (Error?) -> Void) {
+    func refresh() {
         UIView.performWithoutAnimation {
             collectionView.reloadSections(IndexSet(arrayLiteral: index))
         }

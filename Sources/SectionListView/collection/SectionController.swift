@@ -9,7 +9,7 @@ import UIKit
 
 open class SectionController: UICollectionViewController {
     
-    var sectionList: [SectionProtocol] = []
+  public private(set) var sections: [SectionProtocol] = []
     
     public init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -36,7 +36,7 @@ open class SectionController: UICollectionViewController {
     }
 
     open func update(sections: [SectionProtocol]) {
-        self.sectionList = sections.enumerated().map({ (index, item) -> SectionProtocol in
+        self.sections = sections.enumerated().map({ (index, item) -> SectionProtocol in
             var item = item
             item.index = index
             return item
@@ -48,32 +48,31 @@ open class SectionController: UICollectionViewController {
     // MARK: UICollectionViewDataSource
     
     override public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sectionList.count
+        return sections.count
     }
     
     override public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sectionList[section].itemCount
+        return sections[section].itemCount
     }
     
     override public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let section = sectionList[indexPath.section]
+        let section = sections[indexPath.section]
         let cell = section.itemCell(at: indexPath)
-        (cell as? SectionCell)?.indexPath = indexPath
         return cell
     }
     
     override public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         var view: UICollectionReusableView?
         switch kind {
-        case UICollectionView.elementKindSectionHeader: view = sectionList[indexPath.section].headerView(at: indexPath)
-        case UICollectionView.elementKindSectionFooter: view = sectionList[indexPath.section].footerView(at: indexPath)
+        case UICollectionView.elementKindSectionHeader: view = sections[indexPath.section].headerView(at: indexPath)
+        case UICollectionView.elementKindSectionFooter: view = sections[indexPath.section].footerView(at: indexPath)
         default: break
         }
         return view ?? UICollectionReusableView()
     }
     
     override public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        return sectionList[indexPath.section].didSelectItem(at: indexPath)
+        return sections[indexPath.section].didSelectItem(at: indexPath)
     }
     
     @objc func refresh() {
@@ -87,15 +86,15 @@ open class SectionController: UICollectionViewController {
 extension SectionController: UICollectionViewDelegateFlowLayout {
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return sectionList[indexPath.section].itemSize(at: indexPath.item)
+        return sections[indexPath.section].itemSize(at: indexPath.item)
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return sectionList[section].headerSize
+        return sections[section].headerSize
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return sectionList[section].footerSize
+        return sections[section].footerSize
     }
     
 }

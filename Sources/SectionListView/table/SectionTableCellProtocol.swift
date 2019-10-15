@@ -8,6 +8,6 @@
 
 import UIKit
 
-protocol SectionTableCellProtocol {
+public protocol SectionTableCellProtocol {
     static func preferredHeight(tableView: UITableView, data: Any?) -> CGSize
 }

@@ -11,7 +11,7 @@ open class SectionCell: UICollectionViewCell {
 
     open var indexPath = IndexPath()
 
-    public static func preferredSize(collectionView: UICollectionView, data: Any?) -> CGSize {
+    open class func preferredSize(collectionView: UICollectionView, data: Any?) -> CGSize {
         return .zero
     }
 

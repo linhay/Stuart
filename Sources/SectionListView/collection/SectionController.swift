@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class SectionController: UICollectionViewController {
+open class SectionController: UICollectionViewController {
     
     var sectionList: [SectionProtocol] = []
     
@@ -19,21 +19,30 @@ public class SectionController: UICollectionViewController {
         super.init(collectionViewLayout: collectionViewLayout)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = 0
-        flowLayout.estimatedItemSize = CGSize(width: collectionView.frame.width, height: 100)
         collectionView.backgroundColor = .white
     }
     
     func indexPath(for cell: UICollectionViewCell) -> IndexPath? {
         return collectionView.indexPath(for: cell)
+    }
+
+    open func update(sections: [SectionProtocol]) {
+        self.sectionList = sections.enumerated().map({ (index, item) -> SectionProtocol in
+            var item = item
+            item.index = index
+            return item
+        })
+
+        self.collectionView.reloadData()
     }
     
     // MARK: UICollectionViewDataSource
@@ -76,6 +85,10 @@ public class SectionController: UICollectionViewController {
 }
 
 extension SectionController: UICollectionViewDelegateFlowLayout {
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return sectionList[indexPath.section].itemSize(at: indexPath.item)
+    }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return sectionList[section].headerSize

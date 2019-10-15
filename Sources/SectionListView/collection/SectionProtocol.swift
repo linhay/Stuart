@@ -21,7 +21,7 @@ public protocol SectionProtocol {
 
     var sectionInset: UIEdgeInsets { get }
 
-    func itemSize(at indexPath: IndexPath) -> CGSize
+    func itemSize(at index: Int) -> CGSize
     func itemCell(at indexPath: IndexPath) -> UICollectionViewCell
     func didSelectItem(at indexPath: IndexPath)
 
@@ -31,38 +31,26 @@ public protocol SectionProtocol {
     func refresh(complete: @escaping (Error?) -> Void)
 }
 
-extension SectionProtocol {
+public extension SectionProtocol {
+
     var collectionView: UICollectionView {
         return sectionController.collectionView
     }
 
-    var headerSize: CGSize {
-        return CGSize(width: UIScreen.main.bounds.width, height: 28)
+    var itemCount: Int {
+        return 0
     }
 
-    var footerSize: CGSize {
-        return CGSize.zero
-    }
+    var headerSize: CGSize { return .zero }
+    var footerSize: CGSize { return .zero }
 
-    var sectionInset: UIEdgeInsets {
-        if footerSize.height == 0 {
-            return UIEdgeInsets(top: 0, left: 0, bottom: 15, right: 0)
-        } else {
-            return UIEdgeInsets.zero
-        }
-    }
+    var sectionInset: UIEdgeInsets { return .zero }
 
-    func didSelectItem(at indexPath: IndexPath) {
+    func itemSize(at index: Int) -> CGSize { return .zero }
+    func didSelectItem(at indexPath: IndexPath) { }
 
-    }
-
-    func headerView(at indexPath: IndexPath) -> UICollectionReusableView? {
-        return nil
-    }
-
-    func footerView(at indexPath: IndexPath) -> UICollectionReusableView? {
-        return nil
-    }
+    func headerView(at indexPath: IndexPath) -> UICollectionReusableView? { return nil }
+    func footerView(at indexPath: IndexPath) -> UICollectionReusableView? { return nil }
 
     func refresh(complete: @escaping (Error?) -> Void) {
         UIView.performWithoutAnimation {

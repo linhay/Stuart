@@ -11,7 +11,6 @@ public protocol SectionProtocol {
     
     var index: Int { set get }
 
-    var sectionController: SectionController { get }
     var collectionView: UICollectionView { get }
 
     var itemCount: Int { get }
@@ -35,8 +34,6 @@ public protocol SectionProtocol {
 }
 
 public extension SectionProtocol {
-
-    var collectionView: UICollectionView { return sectionController.sectionView }
 
     var itemCount: Int { return 0 }
 

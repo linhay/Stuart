@@ -32,7 +32,6 @@ open class SectionController: UIViewController {
         sectionView.backgroundColor = view.backgroundColor
     }
     
-    
     open func update(sections: [SectionProtocol]) {
         sectionView.update(sections: sections)
     }

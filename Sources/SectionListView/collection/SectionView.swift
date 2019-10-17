@@ -56,7 +56,7 @@ class SectionManager: NSObject {
 // MARK: - public api
 extension SectionManager {
 
-    open func update(sections: [SectionProtocol]) {
+    func update(sections: [SectionProtocol]) {
         self.sections = sections.enumerated().map({ (index, item) -> SectionProtocol in
             var item = item
             item.index = index
@@ -64,6 +64,13 @@ extension SectionManager {
         })
         self.sectionView?.reloadData()
     }
+
+    @objc func refresh() {
+        sections.forEach { (section) in
+            section.refresh()
+        }
+    }
+
 }
 
 // MARK: - SectionManager
@@ -95,12 +102,6 @@ extension SectionManager: UICollectionViewDelegate, UICollectionViewDataSource {
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         return sections[indexPath.section].didSelectItem(at: indexPath)
-    }
-
-    @objc func refresh() {
-        UIView.performWithoutAnimation {
-            self.sectionView?.reloadData()
-        }
     }
 
 }

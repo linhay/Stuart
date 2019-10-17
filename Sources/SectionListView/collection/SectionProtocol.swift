@@ -19,6 +19,9 @@ public protocol SectionProtocol {
     var headerSize: CGSize { get }
     var footerSize: CGSize { get }
 
+    var minimumLineSpacing: CGFloat { get }
+    var minimumInteritemSpacing: CGFloat { get }
+
     var sectionInset: UIEdgeInsets { get }
 
     func itemSize(at index: Int) -> CGSize
@@ -33,16 +36,15 @@ public protocol SectionProtocol {
 
 public extension SectionProtocol {
 
-    var collectionView: UICollectionView {
-        return sectionController.collectionView
-    }
+    var collectionView: UICollectionView { return sectionController.sectionView }
 
-    var itemCount: Int {
-        return 0
-    }
+    var itemCount: Int { return 0 }
 
     var headerSize: CGSize { return .zero }
     var footerSize: CGSize { return .zero }
+
+    var minimumLineSpacing: CGFloat { return 0 }
+    var minimumInteritemSpacing: CGFloat { return 0 }
 
     var sectionInset: UIEdgeInsets { return .zero }
 

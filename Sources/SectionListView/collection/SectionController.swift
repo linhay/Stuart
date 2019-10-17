@@ -7,94 +7,34 @@
 
 import UIKit
 
-open class SectionController: UICollectionViewController {
+open class SectionController: UIViewController {
     
-  public private(set) var sections: [SectionProtocol] = []
+    let sectionView = SectionView()
     
-    public init() {
-        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+    public convenience init() {
+        self.init(nibName: nil, bundle: nil)
     }
     
-    override init(collectionViewLayout: UICollectionViewLayout) {
-        super.init(collectionViewLayout: collectionViewLayout)
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        view.backgroundColor = .white
+        initialize()
     }
     
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initialize()
     }
     
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.minimumLineSpacing = 0
-        collectionView.backgroundColor = .white
+    func initialize() {
+        view.addSubview(sectionView)
+        sectionView.frame = view.bounds
+        sectionView.backgroundColor = view.backgroundColor
     }
     
-    func indexPath(for cell: UICollectionViewCell) -> IndexPath? {
-        return collectionView.indexPath(for: cell)
-    }
-
+    
     open func update(sections: [SectionProtocol]) {
-        self.sections = sections.enumerated().map({ (index, item) -> SectionProtocol in
-            var item = item
-            item.index = index
-            return item
-        })
-
-        self.collectionView.reloadData()
-    }
-    
-    // MARK: UICollectionViewDataSource
-    
-    override public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sections.count
-    }
-    
-    override public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sections[section].itemCount
-    }
-    
-    override public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let section = sections[indexPath.section]
-        let cell = section.itemCell(at: indexPath)
-        return cell
-    }
-    
-    override public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var view: UICollectionReusableView?
-        switch kind {
-        case UICollectionView.elementKindSectionHeader: view = sections[indexPath.section].headerView(at: indexPath)
-        case UICollectionView.elementKindSectionFooter: view = sections[indexPath.section].footerView(at: indexPath)
-        default: break
-        }
-        return view ?? UICollectionReusableView()
-    }
-    
-    override public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        return sections[indexPath.section].didSelectItem(at: indexPath)
-    }
-    
-    @objc func refresh() {
-        UIView.performWithoutAnimation {
-            self.collectionView.reloadData()
-        }
-    }
-    
-}
-
-extension SectionController: UICollectionViewDelegateFlowLayout {
-
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return sections[indexPath.section].itemSize(at: indexPath.item)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return sections[section].headerSize
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return sections[section].footerSize
+        sectionView.update(sections: sections)
     }
     
 }

@@ -1,11 +1,9 @@
 PODS:
   - Stuart (0.1.0):
-    - Stuart/SectionListView (= 0.1.0)
-  - Stuart/SectionListView (0.1.0):
-    - Stuart/SectionListView/collection (= 0.1.0)
-    - Stuart/SectionListView/table (= 0.1.0)
-  - Stuart/SectionListView/collection (0.1.0)
-  - Stuart/SectionListView/table (0.1.0)
+    - Stuart/Input (= 0.1.0)
+    - Stuart/SectionView (= 0.1.0)
+  - Stuart/Input (0.1.0)
+  - Stuart/SectionView (0.1.0)
 
 DEPENDENCIES:
   - Stuart (from `../`)
@@ -15,7 +13,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Stuart: 081e5a8a453106a8e0a6cbac23101ad89f816102
+  Stuart: a9a711fbb7b32a0a522947a1ccb483c5175c6f01
 
 PODFILE CHECKSUM: 5345db2b65a50712fca7c2af9f47d10601288ae4
 

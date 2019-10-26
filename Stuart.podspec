@@ -19,15 +19,12 @@ Pod::Spec.new do |s|
     s.swift_version = ['4.2','5.0','5.1']
 
 
-    s.subspec 'SectionListView' do |ss|
-        ss.subspec 'table' do |sss|
-            sss.source_files = ['Sources/SectionListView/common/**']
-            sss.source_files = ['Sources/SectionListView/table/**']
-        end
-        ss.subspec 'collection' do |sss|
-            sss.source_files = ['Sources/SectionListView/common/**']
-            sss.source_files = ['Sources/SectionListView/collection/**']
-        end
+    s.subspec 'SectionView' do |ss|
+        ss.source_files = ['Sources/SectionView/**']
+    end
+
+    s.subspec 'Input' do |ss|
+        ss.source_files = ['Sources/Input/*/**']
     end
 
 end

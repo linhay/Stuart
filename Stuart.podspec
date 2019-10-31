@@ -18,13 +18,12 @@ Pod::Spec.new do |s|
 
     s.swift_version = ['4.2','5.0','5.1']
 
-
     s.subspec 'SectionView' do |ss|
         ss.source_files = ['Sources/SectionView/**']
     end
 
-    s.subspec 'Input' do |ss|
-        ss.source_files = ['Sources/Input/*/**']
+    s.subspec 'BaseUI' do |ss|
+        ss.source_files = ['Sources/BaseUI/**']
     end
 
 end

@@ -14,6 +14,9 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		CD665DC72367E36D00A17784 /* OBJC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD73B14323670DEC00A080E0 /* OBJC.swift */; };
+		CD665DC82367E4ED00A17784 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
+		CD73B14423670DEC00A080E0 /* OBJC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD73B14323670DEC00A080E0 /* OBJC.swift */; };
 		CEC20CBAEF70B9041FA2EE97 /* Pods_Stuart_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF4F9065331119F88B3D546C /* Pods_Stuart_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +48,7 @@
 		9485C74F07FE2930D0101A22 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		BE28CC153AA2F9889A564DCC /* Stuart.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Stuart.podspec; path = ../Stuart.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		C2E09FD9F03873D857FC46F1 /* Pods_Stuart_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stuart_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD73B14323670DEC00A080E0 /* OBJC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBJC.swift; sourceTree = "<group>"; };
 		D46323AF5E7D20E3BE5248AA /* Pods-Stuart_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stuart_Tests.release.xcconfig"; path = "Target Support Files/Pods-Stuart_Tests/Pods-Stuart_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		EF4F9065331119F88B3D546C /* Pods_Stuart_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stuart_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -106,6 +110,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				CD73B14323670DEC00A080E0 /* OBJC.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -332,6 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD73B14423670DEC00A080E0 /* OBJC.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
@@ -341,7 +347,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD665DC82367E4ED00A17784 /* ViewController.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				CD665DC72367E36D00A17784 /* OBJC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

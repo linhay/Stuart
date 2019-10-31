@@ -35,11 +35,14 @@ open class SectionController: UIViewController {
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         view.backgroundColor = .white
-        initialize()
     }
     
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+
+    open override func viewDidLoad() {
+        super.viewDidLoad()
         initialize()
     }
     

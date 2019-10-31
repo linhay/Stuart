@@ -14,8 +14,14 @@ class Tests: XCTestCase {
     }
     
     func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+
+        let type = OBJC.Class(name: "ViewController")
+        let inten = type?.new()
+        let methods = type?.metaClass?.methods
+        methods?.forEach { (item) in
+            print(item)
+        }
+
     }
     
     func testPerformanceExample() {

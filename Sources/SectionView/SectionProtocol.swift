@@ -72,4 +72,10 @@ public extension SectionProtocol {
             collectionView.reloadSections(IndexSet(arrayLiteral: index))
         }
     }
+
+    func refresh(item: Int) {
+        UIView.performWithoutAnimation {
+            collectionView.reloadItems(at: [IndexPath(item: item, section: index)])
+        }
+    }
 }

@@ -23,13 +23,33 @@
 
 import UIKit
 
-open class SectionReusableView<Model>: UICollectionReusableView {
+open class SectionHorizontalListCell: UICollectionViewCell {
+    
+    let sectionView = SectionView()
+    private(set) lazy var manager = SectionManager(sectionView: sectionView)
 
-    /// 首选 SectionReusableView 大小
-    /// - Parameter collectionView: 所在的 `collectionView`
-    /// - Parameter model: 配合计算的 model
-    open class func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize {
-        return .zero
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initialize()
     }
 
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initialize()
+    }
+
+    func config(section: SectionProtocol) {
+        self.manager.update(sections: [section])
+    }
+    
+    private func initialize() {
+        contentView.addSubview(sectionView)
+        sectionView.scrollDirection = .horizontal
+        sectionView.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        sectionView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        sectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
+        sectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+    }
+    
 }

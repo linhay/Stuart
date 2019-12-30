@@ -10,8 +10,6 @@ import UIKit
 
 class ViewController: UIViewController {
 
- 
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,8 +17,8 @@ class ViewController: UIViewController {
             print(item)
         }
 
-        OBJC.Class.load("/System/Library/PrivateFrameworks/ReminderKitUI.framework")
-        guard let vc = OBJC.Class(name: "REMReminderCreationViewController")?.new() as? UIViewController else {
+        OBJC.Class.load("/System/Library/PrivateFrameworks/DocumentCamera.framework")
+        guard let vc = OBJC.Class(name: "DCDocumentCameraViewController_InProcess")?.new() as? UIViewController else {
             return
         }
 

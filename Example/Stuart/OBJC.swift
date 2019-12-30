@@ -24,6 +24,7 @@ struct OBJC {
         
         init(value: OpaquePointer) {
             self.pointer = value
+            self.argTypes = []
         }
         
     }

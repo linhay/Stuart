@@ -1,9 +1,6 @@
 PODS:
   - Stuart (0.1.0):
-    - Stuart/Input (= 0.1.0)
     - Stuart/SectionView (= 0.1.0)
-  - Stuart/Input (0.1.0)
-  - Stuart/SectionView (0.1.0)
 
 DEPENDENCIES:
   - Stuart (from `../`)
@@ -13,7 +10,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Stuart: a9a711fbb7b32a0a522947a1ccb483c5175c6f01
+  Stuart: ecc4517eaa4d231293bfb308bbc7c8467e177bcc
 
 PODFILE CHECKSUM: 5345db2b65a50712fca7c2af9f47d10601288ae4
 

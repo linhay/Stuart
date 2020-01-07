@@ -1,5 +1,4 @@
 import XCTest
-import Stuart
 
 class Tests: XCTestCase {
     
@@ -14,13 +13,6 @@ class Tests: XCTestCase {
     }
     
     func testExample() {
-
-        let type = OBJC.Class(name: "ViewController")
-        let inten = type?.new()
-        let methods = type?.metaClass?.methods
-        methods?.forEach { (item) in
-            print(item)
-        }
 
     }
     

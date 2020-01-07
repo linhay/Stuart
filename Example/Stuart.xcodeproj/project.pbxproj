@@ -175,7 +175,6 @@
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				64C22D019D737FF37D739B64 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -268,24 +267,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		64C22D019D737FF37D739B64 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stuart_Example/Pods-Stuart_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Stuart/Stuart.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Stuart.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stuart_Example/Pods-Stuart_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		73FCBCB00B390A4E58603449 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

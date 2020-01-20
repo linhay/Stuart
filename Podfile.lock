@@ -1,0 +1,29 @@
+PODS:
+  - SnapKit (5.0.1)
+  - Stuart (0.0.1):
+    - Stuart/SectionView (= 0.0.1)
+  - Stuart/SectionView (0.0.1)
+  - SwiftLint (0.38.1)
+
+DEPENDENCIES:
+  - SnapKit
+  - Stuart (from `./Template.podspec`)
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - SnapKit
+    - SwiftLint
+
+EXTERNAL SOURCES:
+  Stuart:
+    :path: "./Template.podspec"
+
+SPEC CHECKSUMS:
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Stuart: 4508be1316efea0f633079b0d3db99e1b567cf2a
+  SwiftLint: 0aeb99ca7ccfc222ef93e2560a35e669f5465e6c
+
+PODFILE CHECKSUM: 20f20b971f1e8acbc53ba5622433ddb42c2b39fb
+
+COCOAPODS: 1.8.4

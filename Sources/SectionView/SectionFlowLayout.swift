@@ -23,26 +23,35 @@
 import UIKit
 
 open class SectionFlowLayout: UICollectionViewFlowLayout {
-
+    
     public enum ContentMode {
         /// 左对齐
         case left
         /// header & footer 贴合 cell
         case headerAndFooterViewFitInset
-
+        
         case none
     }
-
+    
     public var contentMode = ContentMode.none
-
+    
+    private var oldBounds = CGRect.zero
+    
+    override public func prepare() {
+        guard let collectionView = collectionView else {
+            return
+        }
+        oldBounds = collectionView.bounds
+    }
+    
     override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-
+        
         guard let attributes = super.layoutAttributesForElements(in: rect)?.map({ $0.copy() }) as? [UICollectionViewLayoutAttributes],
-
+            
             let collectionView = collectionView else {
                 return nil
         }
-
+        
         switch contentMode {
         case .left:
             return modeLeft(collectionView: collectionView, attributes: attributes)
@@ -52,19 +61,16 @@ open class SectionFlowLayout: UICollectionViewFlowLayout {
             return modeHeaderAndFooterViewFitInset(collectionView: collectionView, attributes: attributes)
         }
     }
-
-    open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        guard let collectionView = self.collectionView, collectionView.bounds.size != newBounds.size else {
-            return true
-        }
-        return false
+    
+    override public func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return oldBounds.size != newBounds.size || sectionHeadersPinToVisibleBounds || sectionFootersPinToVisibleBounds
     }
-
+    
 }
 
 // MARK: - Mode
 extension SectionFlowLayout {
-
+    
     private func modeHeaderAndFooterViewFitInset(collectionView: UICollectionView, attributes: [UICollectionViewLayoutAttributes]) -> [UICollectionViewLayoutAttributes]? {
         for item in attributes {
             guard item.representedElementCategory == .supplementaryView,
@@ -81,11 +87,11 @@ extension SectionFlowLayout {
         }
         return attributes
     }
-
+    
     private func modeLeft(collectionView: UICollectionView, attributes: [UICollectionViewLayoutAttributes]) -> [UICollectionViewLayoutAttributes]? {
         var lineStore = [CGFloat: [UICollectionViewLayoutAttributes]]()
         var list = [UICollectionViewLayoutAttributes]()
-
+        
         for item in attributes {
             guard item.representedElementCategory == .cell,
                 let delegate = collectionView.delegate as? UICollectionViewDelegateFlowLayout,
@@ -94,7 +100,7 @@ extension SectionFlowLayout {
                     list.append(item)
                     continue
             }
-
+            
             if let lastItem = lineStore[item.frame.minY]?.last {
                 item.frame.origin.x = lastItem.frame.maxX + minimumInteritemSpacing
                 lineStore[item.frame.minY]?.append(item)
@@ -105,5 +111,5 @@ extension SectionFlowLayout {
         }
         return list
     }
-
+    
 }

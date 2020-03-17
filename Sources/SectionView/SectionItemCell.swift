@@ -32,7 +32,7 @@ open class SectionItemCell<Model>: UICollectionViewCell {
     /// 首选cell大小
     /// - Parameter collectionView: 所在的 `collectionView`
     /// - Parameter model: 配合计算的 model
-    open class func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize {
+    open class func preferredSize(collectionView: UICollectionView, model: Model? = nil) -> CGSize {
         return .zero
     }
     

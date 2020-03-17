@@ -58,6 +58,7 @@ open class SectionView: UICollectionView {
     
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
+        collectionViewLayout = SectionFlowLayout()
         initialize()
     }
     
@@ -65,11 +66,6 @@ open class SectionView: UICollectionView {
 
         if backgroundColor == .some(UIColor.black) {
             backgroundColor = .white
-        }
-        
-        // 从 xib 创建时 为 nil
-        if collectionViewLayout == nil {
-            collectionViewLayout = SectionFlowLayout()
         }
         
         showsVerticalScrollIndicator = false

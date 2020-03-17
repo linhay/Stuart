@@ -145,7 +145,13 @@ extension SectionManager: UICollectionViewDelegate, UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         return sections[indexPath.section].didSelectItem(at: indexPath)
     }
-    
+    public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        sections[sourceIndexPath.section].moveItem(from: sourceIndexPath, to: destinationIndexPath)
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return sections[indexPath.section].canMove(at: indexPath)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

@@ -123,6 +123,9 @@ public protocol SectionProtocol: class {
      - Important: 默认采用 `reloadItems` 的方式刷新
      */
     func refresh(items at: [Int])
+
+    func canMove(at: IndexPath) -> Bool
+    func moveItem(from: IndexPath, to: IndexPath)
 }
 
 public extension SectionProtocol {
@@ -136,6 +139,9 @@ public extension SectionProtocol {
     var sectionInset: UIEdgeInsets { return .zero }
 
     func didSelectItem(at indexPath: IndexPath) { }
+
+    func canMove(at: IndexPath) -> Bool { false }
+    func moveItem(from: IndexPath, to: IndexPath) { }
 
     func headerView(at indexPath: IndexPath) -> UICollectionReusableView? { return nil }
     func footerView(at indexPath: IndexPath) -> UICollectionReusableView? { return nil }

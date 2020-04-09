@@ -35,7 +35,7 @@ fileprivate final class WeakBox<T: AnyObject> {
 public class SectionManager: NSObject {
     
     private weak var sectionView: UICollectionView?
-    private(set) var sections: [SectionProtocol] = []
+    public private(set) var sections: [SectionProtocol] = []
     private var observeScrollStore: [String: WeakBox<UIScrollViewDelegate>] = [:]
 
     public init(sectionView: UICollectionView) {

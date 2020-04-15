@@ -23,142 +23,240 @@
 import UIKit
 
 public protocol SectionProtocol: class {
-
+    
     /**
      Section 所在的位置, 会由 SectionManager 重新分配, 可随意填值
      */
     var index: Int { get set }
-
+    
     /**
      设置 Section 所在的 UICollectionView
      - Default:  0
      */
-    var collectionView: UICollectionView { get }
-
+    var collectionView: UICollectionView? { get set }
+    
     /**
      设置 Section 的 Cell s数量
      */
     var itemCount: Int { get }
-
+    
     /**
      设置 Section 的最小行边距
      - Default:  0
      */
     var minimumLineSpacing: CGFloat { get }
-
+    
     /**
      设置 Section 的最小列边距
      - Default:  0
      */
     var minimumInteritemSpacing: CGFloat { get }
-
+    
     /**
      设置 Section 的边距
      - Default:  UIEdgeInsets.zero
      */
     var sectionInset: UIEdgeInsets { get }
-
+    
     /**
      设置 Section 中 Cell 的大小
      - Parameter index: indexPath
      */
     func itemSize(at index: Int) -> CGSize
-
+    
     /**
      设置 Section 中 headerView 的大小
      - Parameter index: indexPath
      - Default:  CGSize.zero
      */
     var headerSize: CGSize { get }
-
+    
     /**
      设置 Section 中 footerView 的大小
      - Parameter index: indexPath
      - Default:  CGSize.zero
      */
     var footerSize: CGSize { get }
-
+    
     /**
      设置 Section 的 Cell
      - Parameter index: indexPath
      */
     func itemCell(at indexPath: IndexPath) -> UICollectionViewCell
-
+    
     /**
      设置 Section 的 headerView
      - Parameter index: indexPath
      - Default:  nil
      */
     func headerView(at indexPath: IndexPath) -> UICollectionReusableView?
-
+    
     /**
      设置 Section 的 footerView
      - Parameter index: indexPath
      - Default:  nil
      */
     func footerView(at indexPath: IndexPath) -> UICollectionReusableView?
-
+    
     /**
      响应 Section 的 Cell 点击事件
      - Parameter index: indexPath
      */
     func didSelectItem(at indexPath: IndexPath)
-
+    
     /**
      刷新 Section
      - Important: 默认采用 `reloadSections` 的方式刷新
      */
     func refresh()
-
+    
     /**
      刷新 Section 中指定 Cell
      - Parameter at: 指定 Cell 位置
      - Important: 默认采用 `reloadItems` 的方式刷新
      */
-    func refresh(item at: Int)
-
+    func refresh(at index: Int)
+    
     /**
      刷新 Section 中指定 Cell
      - Parameter at: 指定 Cell 位置
      - Important: 默认采用 `reloadItems` 的方式刷新
      */
-    func refresh(items at: [Int])
-
-    func canMove(at: IndexPath) -> Bool
-    func moveItem(from: IndexPath, to: IndexPath)
+    func refresh(at indexs: [Int])
+    
+    func config(collectionView: UICollectionView)
+    
+    func canMove(at: Int) -> Bool
+    func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
 }
 
 public extension SectionProtocol {
+    
+    var sectionView: UICollectionView {
+        return collectionView!
+    }
+}
 
-    var headerSize: CGSize { return .zero }
-    var footerSize: CGSize { return .zero }
-
+public extension SectionProtocol {
+    
     var minimumLineSpacing: CGFloat { return 0 }
     var minimumInteritemSpacing: CGFloat { return 0 }
-
     var sectionInset: UIEdgeInsets { return .zero }
+    
+}
 
-    func didSelectItem(at indexPath: IndexPath) { }
-
-    func canMove(at: IndexPath) -> Bool { false }
-    func moveItem(from: IndexPath, to: IndexPath) { }
-
+public extension SectionProtocol {
+    
+    var headerSize: CGSize { return .zero }
+    var footerSize: CGSize { return .zero }
+    
     func headerView(at indexPath: IndexPath) -> UICollectionReusableView? { return nil }
     func footerView(at indexPath: IndexPath) -> UICollectionReusableView? { return nil }
+    
+}
 
+public extension SectionProtocol {
+    
+    func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
+        sectionView.performBatchUpdates(updates, completion: completion)
+    }
+    
+}
+
+public extension SectionProtocol {
+    
+    func canMove(at: Int) -> Bool { false }
+    func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) { }
+    
+}
+
+public extension SectionProtocol {
+    
+    func reload(at index: Int) {
+        delete(at: [index])
+    }
+    
+    func reload(at indexs: [Int]) {
+        sectionView.reloadItems(at: indexPaths(from: indexs))
+    }
+    
+}
+
+public extension SectionProtocol {
+    
+    func insert(at index: Int) {
+        delete(at: [index])
+    }
+    
+    func insert(at indexs: [Int]) {
+        sectionView.insertItems(at: indexPaths(from: indexs))
+    }
+    
+}
+
+public extension SectionProtocol {
+    
+    func delete(at index: Int) {
+        delete(at: [index])
+    }
+    
+    func delete(at indexs: [Int]) {
+        sectionView.deleteItems(at: indexPaths(from: indexs))
+    }
+    
+}
+
+public extension SectionProtocol {
+    
+    func didSelectItem(at indexPath: IndexPath) { }
+    
+    func cell(at index: Int) -> UICollectionViewCell? {
+        return sectionView.cellForItem(at: indexPath(from: index))
+    }
+    
+    func scroll(to index: Int, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+        sectionView.scrollToItem(at: indexPath(from: index), at: scrollPosition, animated: animated)
+    }
+    
+    func deselect(at index: Int, animated: Bool) {
+        sectionView.deselectItem(at: indexPath(from: index), animated: animated)
+    }
+    
+    func select(at index: Int?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition) {
+        sectionView.selectItem(at: indexPath(from: index), animated: animated, scrollPosition: scrollPosition)
+    }
+    
+}
+
+public extension SectionProtocol {
+    
     func refresh() {
-        UIView.performWithoutAnimation {
-            collectionView.reloadData()
-        }
+        sectionView.reloadData()
     }
+    
+    func refresh(at index: Int) {
+        refresh(at: [index])
+    }
+    
+    func refresh(at indexs: [Int]) {
+        sectionView.reloadItems(at: indexPaths(from: indexs))
+    }
+    
+}
 
-    func refresh(item at: Int) {
-        refresh(items: [at])
-    }
 
-    func refresh(items at: [Int]) {
-        UIView.performWithoutAnimation {
-            collectionView.reloadData()
-        }
+private extension SectionProtocol {
+    
+    func indexPath(from value: Int?) -> IndexPath? {
+        return value.map({ IndexPath(item: $0, section: index) })
     }
+    
+    func indexPath(from value: Int) -> IndexPath {
+        return IndexPath(item: value, section: index)
+    }
+    
+    func indexPaths(from value: [Int]) -> [IndexPath] {
+        return value.map({ IndexPath(item: $0, section: index) })
+    }
+    
 }

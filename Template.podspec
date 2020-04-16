@@ -24,9 +24,19 @@ Pod::Spec.new do |s|
 
     s.requires_arc = true
 
+    s.subspec "unit" do |sp|
+        sp.frameworks = "UIKit"
+        sp.source_files  = ["Sources/unit/*.swift"]
+    end
+
     s.subspec "SectionView" do |sp|
         sp.frameworks = "UIKit"
-        sp.source_files  = ["Sources/SectionView/*.swift"]
+        sp.source_files  = ["Sources/sectionView/*.swift"]
+    end
+
+    s.subspec "ListView" do |sp|
+        sp.frameworks = "UIKit"
+        sp.source_files  = ["Sources/listView/*.swift"]
     end
 
 end

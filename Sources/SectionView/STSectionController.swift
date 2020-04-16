@@ -22,13 +22,22 @@
 
 import UIKit
 
-open class SectionReusableView<Model>: UICollectionReusableView {
+open class STSectionController: UIViewController {
+    
+    public let sectionView  = STSectionView()
+    public lazy var manager = STSectionManager(sectionView: sectionView)
 
-    /// 首选 SectionReusableView 大小
-    /// - Parameter collectionView: 所在的 `collectionView`
-    /// - Parameter model: 配合计算的 model
-    open class func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize {
-        return .zero
+    public convenience init() {
+        self.init(nibName: nil, bundle: nil)
     }
-
+    
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        if view.backgroundColor == nil {
+            view.backgroundColor = .white
+        }
+        view.addSubview(sectionView)
+        sectionView.frame = view.bounds
+    }
+    
 }

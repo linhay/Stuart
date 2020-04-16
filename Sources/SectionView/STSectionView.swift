@@ -22,7 +22,7 @@
 
 import UIKit
 
-open class SectionView: UICollectionView {
+open class STSectionView: UICollectionView {
 
     /// 滚动方向
     public var scrollDirection: UICollectionView.ScrollDirection? {
@@ -34,12 +34,12 @@ open class SectionView: UICollectionView {
         }
     }
     
-    public var layoutMode: SectionFlowLayout.ContentMode {
+    public var layoutMode: STSectionFlowLayout.ContentMode {
         set {
-            (collectionViewLayout as? SectionFlowLayout)?.contentMode = newValue
+            (collectionViewLayout as? STSectionFlowLayout)?.contentMode = newValue
         }
         get {
-            return (collectionViewLayout as? SectionFlowLayout)?.contentMode ?? .none
+            return (collectionViewLayout as? STSectionFlowLayout)?.contentMode ?? .none
         }
     }
     
@@ -48,7 +48,7 @@ open class SectionView: UICollectionView {
     }
     
     public convenience init(frame: CGRect) {
-        self.init(frame: frame, collectionViewLayout: SectionFlowLayout())
+        self.init(frame: frame, collectionViewLayout: STSectionFlowLayout())
     }
     
     public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -58,7 +58,7 @@ open class SectionView: UICollectionView {
     
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
-        collectionViewLayout = SectionFlowLayout()
+        collectionViewLayout = STSectionFlowLayout()
         initialize()
     }
     

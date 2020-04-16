@@ -22,23 +22,12 @@
 
 import UIKit
 
-fileprivate final class WeakBox<T: AnyObject> {
+public class STSectionManager: STScrollManager {
     
-    weak var value: T?
-    
-    init(_ value: T) {
-        self.value = value
-    }
-    
-}
-
-public class SectionManager: NSObject {
-    
-    public private(set) var sections: [SectionProtocol] = []
+    public private(set) var sections: [STSectionProtocol] = []
     
     private unowned var sectionView: UICollectionView
-    private var observeScrollStore: [String: WeakBox<UIScrollViewDelegate>] = [:]
-    
+
     public init(sectionView: UICollectionView) {
         self.sectionView = sectionView
         super.init()
@@ -49,12 +38,12 @@ public class SectionManager: NSObject {
 }
 
 // MARK: - public api
-public extension SectionManager {
+public extension STSectionManager {
     
     // MARK: - SectionProtocol
     
     /// 添加多组 SectionProtocol
-    func update(_ newSections: SectionProtocol..., animated: Bool = false) {
+    func update(_ newSections: STSectionProtocol..., animated: Bool = false) {
         let isNeedUpdateSections = isNeedUpdate(sections: sections, with: newSections)
         rebase(sections)
         sections = calculator(sections: newSections, in: sectionView)
@@ -74,10 +63,10 @@ public extension SectionManager {
 
 }
 
-private extension SectionManager {
+private extension STSectionManager {
 
     /// 是否需要重新设置 sections
-    func isNeedUpdate(sections sections1: [SectionProtocol], with sections2: [SectionProtocol]) -> Bool {
+    func isNeedUpdate(sections sections1: [STSectionProtocol], with sections2: [STSectionProtocol]) -> Bool {
         guard sections1.count == sections2.count else {
             return true
         }
@@ -89,20 +78,20 @@ private extension SectionManager {
         return false
     }
 
-    func rebase(_ sections: [SectionProtocol]) {
+    func rebase(_ sections: [STSectionProtocol]) {
         sections.forEach { rebase($0) }
     }
 
-    func rebase(_ section: SectionProtocol) {
+    func rebase(_ section: STSectionProtocol) {
         section.collectionView = nil
         section.index = -1
     }
 
-    func contains(section: SectionProtocol, in sections: [SectionProtocol]) -> Bool {
+    func contains(section: STSectionProtocol, in sections: [STSectionProtocol]) -> Bool {
         return sections.contains(where: { $0 === section })
     }
 
-    func calculator(sections: [SectionProtocol], in sectionView: UICollectionView) -> [SectionProtocol] {
+    func calculator(sections: [STSectionProtocol], in sectionView: UICollectionView) -> [STSectionProtocol] {
         return sections.enumerated().compactMap { [weak sectionView] index, section in
             guard let sectionView = sectionView else {
                 return nil
@@ -116,7 +105,7 @@ private extension SectionManager {
 
 }
 
-public extension SectionManager {
+public extension STSectionManager {
     
     func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
         sectionView.performBatchUpdates(updates, completion: completion)
@@ -126,7 +115,7 @@ public extension SectionManager {
         sectionView.reloadData()
     }
     
-    func insert(section: SectionProtocol, at index: Int) {
+    func insert(section: STSectionProtocol, at index: Int) {
         guard contains(section: section, in: sections) == false else {
             return
         }
@@ -156,25 +145,8 @@ public extension SectionManager {
     
 }
 
-extension SectionManager {
-    
-    // MARK: - ObserveScroll
-    func addObserveScroll(target: NSObject & UIScrollViewDelegate) {
-        observeScrollStore[target.self.description] = WeakBox(target)
-    }
-    
-    func addObserveScroll(targets: [NSObject & UIScrollViewDelegate]) {
-        targets.forEach { addObserveScroll(target: $0) }
-    }
-    
-    func removeObserveScroll(target: NSObject & UIScrollViewDelegate) {
-        observeScrollStore[target.self.description] = nil
-    }
-    
-}
-
 // MARK: - UICollectionViewDelegate && UICollectionViewDataSource
-extension SectionManager: UICollectionViewDelegate, UICollectionViewDataSource {
+extension STSectionManager: UICollectionViewDelegate, UICollectionViewDataSource {
     
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
@@ -219,7 +191,7 @@ extension SectionManager: UICollectionViewDelegate, UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension SectionManager: UICollectionViewDelegateFlowLayout {
+extension STSectionManager: UICollectionViewDelegateFlowLayout {
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return sections[indexPath.section].itemSize(at: indexPath.item)
@@ -244,78 +216,4 @@ extension SectionManager: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return sections[section].itemCount == 0 ? .zero : sections[section].sectionInset
     }
-}
-
-// MARK: - scrollViewDelegate
-extension SectionManager {
-    
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewDidScroll?(scrollView) }
-    }
-    
-    public func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewDidZoom?(scrollView) }
-    }
-    
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewWillBeginDragging?(scrollView) }
-    }
-    
-    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewWillEndDragging?(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset) }
-    }
-    
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate) }
-    }
-    
-    public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewWillBeginDecelerating?(scrollView) }
-    }
-    
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewDidEndDecelerating?(scrollView) }
-    }
-    
-    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewDidEndScrollingAnimation?(scrollView) }
-    }
-    
-    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        for box in observeScrollStore.values {
-            guard let target = box.value, let view = target.viewForZooming?(in: scrollView) else {
-                continue
-            }
-            return view
-        }
-        return nil
-    }
-    
-    public func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewWillBeginZooming?(scrollView, with: view) }
-    }
-    
-    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewDidEndZooming?(scrollView, with: view, atScale: scale) }
-    }
-    
-    public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        for box in observeScrollStore.values {
-            guard let target = box.value, let result = target.scrollViewShouldScrollToTop?(scrollView), result == false else {
-                continue
-            }
-            return result
-        }
-        return true
-    }
-    
-    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewDidScrollToTop?(scrollView) }
-    }
-    
-    @available(iOS 11.0, *)
-    public func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
-        observeScrollStore.values.forEach { $0.value?.scrollViewDidChangeAdjustedContentInset?(scrollView) }
-    }
-    
 }

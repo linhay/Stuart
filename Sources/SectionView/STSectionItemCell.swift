@@ -22,7 +22,7 @@
 
 import UIKit
 
-open class SectionItemCell<Model>: UICollectionViewCell {
+open class STSectionItemCell<Model>: UICollectionViewCell {
 
     /// 首选cell大小
     open class var preferredSize: CGSize {

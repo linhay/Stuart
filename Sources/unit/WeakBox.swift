@@ -22,22 +22,12 @@
 
 import UIKit
 
-open class SectionController: UIViewController {
-    
-    public let sectionView  = SectionView()
-    public lazy var manager = SectionManager(sectionView: sectionView)
+final class WeakBox<T: AnyObject> {
 
-    public convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    weak var value: T?
+
+    init(_ value: T) {
+        self.value = value
     }
-    
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        if view.backgroundColor == nil {
-            view.backgroundColor = .white
-        }
-        view.addSubview(sectionView)
-        sectionView.frame = view.bounds
-    }
-    
+
 }

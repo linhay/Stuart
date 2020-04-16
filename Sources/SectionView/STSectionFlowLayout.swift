@@ -22,7 +22,7 @@
 
 import UIKit
 
-open class SectionFlowLayout: UICollectionViewFlowLayout {
+open class STSectionFlowLayout: UICollectionViewFlowLayout {
     
     public enum ContentMode {
         /// 左对齐
@@ -69,7 +69,7 @@ open class SectionFlowLayout: UICollectionViewFlowLayout {
 }
 
 // MARK: - Mode
-extension SectionFlowLayout {
+extension STSectionFlowLayout {
     
     private func modeHeaderAndFooterViewFitInset(collectionView: UICollectionView, attributes: [UICollectionViewLayoutAttributes]) -> [UICollectionViewLayoutAttributes]? {
         for item in attributes {

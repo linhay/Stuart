@@ -135,6 +135,7 @@ public extension SectionProtocol {
     var sectionView: UICollectionView {
         return collectionView!
     }
+
 }
 
 public extension SectionProtocol {
@@ -158,7 +159,7 @@ public extension SectionProtocol {
 public extension SectionProtocol {
     
     func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
-        sectionView.performBatchUpdates(updates, completion: completion)
+        collectionView?.performBatchUpdates(updates, completion: completion)
     }
     
 }
@@ -173,35 +174,51 @@ public extension SectionProtocol {
 public extension SectionProtocol {
     
     func reload(at index: Int) {
-        delete(at: [index])
+        reload(at: [index])
     }
     
     func reload(at indexs: [Int]) {
-        sectionView.reloadItems(at: indexPaths(from: indexs))
+        collectionView?.reloadItems(at: indexPaths(from: indexs))
     }
     
 }
 
 public extension SectionProtocol {
     
-    func insert(at index: Int) {
-        delete(at: [index])
+    func insert(at index: Int, willUpdate: (() -> Void)? = nil) {
+        insert(at: [index])
     }
     
-    func insert(at indexs: [Int]) {
-        sectionView.insertItems(at: indexPaths(from: indexs))
+    func insert(at indexs: [Int], willUpdate: (() -> Void)? = nil) {
+        guard indexs.isEmpty == false else {
+            return
+        }
+        willUpdate?()
+        if let max = indexs.max(), itemCount <= max {
+            collectionView?.reloadData()
+        } else {
+            collectionView?.insertItems(at: indexPaths(from: indexs))
+        }
     }
     
 }
 
 public extension SectionProtocol {
     
-    func delete(at index: Int) {
-        delete(at: [index])
+    func delete(at index: Int, willUpdate: (() -> Void)? = nil) {
+        delete(at: [index], willUpdate: willUpdate)
     }
     
-    func delete(at indexs: [Int]) {
-        sectionView.deleteItems(at: indexPaths(from: indexs))
+    func delete(at indexs: [Int], willUpdate: (() -> Void)? = nil) {
+        guard indexs.isEmpty == false else {
+            return
+        }
+        willUpdate?()
+        if itemCount <= 0 {
+            collectionView?.reloadData()
+        } else {
+            collectionView?.deleteItems(at: indexPaths(from: indexs))
+        }
     }
     
 }
@@ -211,19 +228,19 @@ public extension SectionProtocol {
     func didSelectItem(at indexPath: IndexPath) { }
     
     func cell(at index: Int) -> UICollectionViewCell? {
-        return sectionView.cellForItem(at: indexPath(from: index))
+        return collectionView?.cellForItem(at: indexPath(from: index))
     }
     
     func scroll(to index: Int, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
-        sectionView.scrollToItem(at: indexPath(from: index), at: scrollPosition, animated: animated)
+        collectionView?.scrollToItem(at: indexPath(from: index), at: scrollPosition, animated: animated)
     }
     
     func deselect(at index: Int, animated: Bool) {
-        sectionView.deselectItem(at: indexPath(from: index), animated: animated)
+        collectionView?.deselectItem(at: indexPath(from: index), animated: animated)
     }
     
     func select(at index: Int?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition) {
-        sectionView.selectItem(at: indexPath(from: index), animated: animated, scrollPosition: scrollPosition)
+        collectionView?.selectItem(at: indexPath(from: index), animated: animated, scrollPosition: scrollPosition)
     }
     
 }
@@ -231,7 +248,7 @@ public extension SectionProtocol {
 public extension SectionProtocol {
     
     func refresh() {
-        sectionView.reloadData()
+        collectionView?.reloadData()
     }
     
     func refresh(at index: Int) {
@@ -239,11 +256,10 @@ public extension SectionProtocol {
     }
     
     func refresh(at indexs: [Int]) {
-        sectionView.reloadItems(at: indexPaths(from: indexs))
+        collectionView?.reloadItems(at: indexPaths(from: indexs))
     }
     
 }
-
 
 private extension SectionProtocol {
     

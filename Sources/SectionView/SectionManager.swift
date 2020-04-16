@@ -23,21 +23,22 @@
 import UIKit
 
 fileprivate final class WeakBox<T: AnyObject> {
-
+    
     weak var value: T?
-
+    
     init(_ value: T) {
         self.value = value
     }
-
+    
 }
 
 public class SectionManager: NSObject {
     
-    private unowned var sectionView: UICollectionView
     public private(set) var sections: [SectionProtocol] = []
+    
+    private unowned var sectionView: UICollectionView
     private var observeScrollStore: [String: WeakBox<UIScrollViewDelegate>] = [:]
-
+    
     public init(sectionView: UICollectionView) {
         self.sectionView = sectionView
         super.init()
@@ -49,31 +50,31 @@ public class SectionManager: NSObject {
 
 // MARK: - public api
 extension SectionManager {
-
+    
     // MARK: - SectionProtocol
-
+    
     /// 添加多组 SectionProtocol
     public func update(sections: [SectionProtocol], animated: Bool = false) {
-
+        
         /// 是否需要重新设置 sections
         func isNeedUpdate(sections: [SectionProtocol]) -> Bool {
             guard sections.count == self.sections.count else {
                 return true
             }
-
+            
             for index in 0..<sections.count where sections[index] !== self.sections[index] {
                 return true
             }
-
+            
             return false
         }
-
+        
         let isNeedUpdateSections = isNeedUpdate(sections: sections)
-
+        
         if isNeedUpdateSections {
             self.sections = sections
         }
-
+        
         /// 刷新 sections 的 index
         self.sections.enumerated().forEach { [weak self] index, item in
             guard let self = self else {
@@ -94,30 +95,62 @@ extension SectionManager {
             }
         }
     }
-
+    
     /// 添加多组 SectionProtocol
     public func update(sections: SectionProtocol...) {
         update(sections: sections)
     }
+}
 
-    /// 刷新多组 Section
-    public func refresh() {
+public extension SectionManager {
+    
+    func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
+        sectionView.performBatchUpdates(updates, completion: completion)
+    }
+    
+    func refresh() {
         sectionView.reloadData()
     }
+    
+    func insert(section: SectionProtocol, at index: Int) {
+        section.collectionView = sectionView
+        section.index = index
+        let isEmpty = sections.isEmpty
+        if sections.isEmpty || sections.count <= index {
+            sections.append(section)
+            isEmpty ? sectionView.reloadData() : sectionView.insertSections(IndexSet([sections.count]))
+        } else {
+            sections.insert(section, at: index)
+            sectionView.insertSections(IndexSet([index]))
+        }
+    }
+    
+    func delete(at index: Int) {
+        if sections.isEmpty || sections.count <= index {
+            sectionView.reloadData()
+        } else {
+            sections.remove(at: index)
+            sectionView.deleteSections(IndexSet([index]))
+        }
+    }
+    
+}
 
+extension SectionManager {
+    
     // MARK: - ObserveScroll
     func addObserveScroll(target: NSObject & UIScrollViewDelegate) {
         observeScrollStore[target.self.description] = WeakBox(target)
     }
-
+    
     func addObserveScroll(targets: [NSObject & UIScrollViewDelegate]) {
         targets.forEach { addObserveScroll(target: $0) }
     }
-
+    
     func removeObserveScroll(target: NSObject & UIScrollViewDelegate) {
         observeScrollStore[target.self.description] = nil
     }
-
+    
 }
 
 // MARK: - UICollectionViewDelegate && UICollectionViewDataSource
@@ -150,7 +183,7 @@ extension SectionManager: UICollectionViewDelegate, UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         return sections[indexPath.section].didSelectItem(at: indexPath)
     }
-
+    
     public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if sourceIndexPath.section == destinationIndexPath.section {
             sections[sourceIndexPath.section].move(from: sourceIndexPath, to: destinationIndexPath)
@@ -159,7 +192,7 @@ extension SectionManager: UICollectionViewDelegate, UICollectionViewDataSource {
             sections[destinationIndexPath.section].move(from: sourceIndexPath, to: destinationIndexPath)
         }
     }
-
+    
     public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         return sections[indexPath.section].canMove(at: indexPath.item)
     }

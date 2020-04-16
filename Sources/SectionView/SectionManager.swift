@@ -49,57 +49,61 @@ public class SectionManager: NSObject {
 }
 
 // MARK: - public api
-extension SectionManager {
+public extension SectionManager {
     
     // MARK: - SectionProtocol
     
     /// 添加多组 SectionProtocol
-    public func update(sections: [SectionProtocol], animated: Bool = false) {
-        
-        /// 是否需要重新设置 sections
-        func isNeedUpdate(sections: [SectionProtocol]) -> Bool {
-            guard sections.count == self.sections.count else {
-                return true
-            }
-            
-            for index in 0..<sections.count where sections[index] !== self.sections[index] {
-                return true
-            }
-            
-            return false
+    func update(_ newSections: [SectionProtocol], animated: Bool = false) {
+        let isNeedUpdateSections = isNeedUpdate(sections: sections, with: newSections)
+        sections = calculator(sections: newSections, in: sectionView)
+
+        guard isNeedUpdateSections else {
+            return
         }
-        
-        let isNeedUpdateSections = isNeedUpdate(sections: sections)
-        
-        if isNeedUpdateSections {
-            self.sections = sections
-        }
-        
-        /// 刷新 sections 的 index
-        self.sections.enumerated().forEach { [weak self] index, item in
-            guard let self = self else {
-                return
-            }
-            item.index = index
-            item.collectionView = self.sectionView
-            item.config(collectionView: self.sectionView)
-        }
-        
-        if isNeedUpdateSections {
-            if animated {
-                self.sectionView.reloadData()
-            } else {
-                UIView.performWithoutAnimation {
-                    self.sectionView.reloadData()
-                }
+
+        if animated {
+            sectionView.reloadData()
+        } else {
+            UIView.performWithoutAnimation { [weak self] in
+                self?.sectionView.reloadData()
             }
         }
     }
     
     /// 添加多组 SectionProtocol
-    public func update(sections: SectionProtocol...) {
-        update(sections: sections)
+    func update(_ sections: SectionProtocol...) {
+        update(sections, animated: true)
     }
+}
+
+private extension SectionManager {
+
+    /// 是否需要重新设置 sections
+    func isNeedUpdate(sections sections1: [SectionProtocol], with sections2: [SectionProtocol]) -> Bool {
+        guard sections1.count == sections2.count else {
+            return true
+        }
+
+        for index in 0..<sections1.count where sections1[index] !== sections2[index] {
+            return true
+        }
+
+        return false
+    }
+
+    func calculator(sections: [SectionProtocol], in sectionView: UICollectionView) -> [SectionProtocol] {
+        return sections.enumerated().compactMap { [weak sectionView] index, section in
+            guard let sectionView = sectionView else {
+                return nil
+            }
+            section.index = index
+            section.collectionView = sectionView
+            section.config(collectionView: sectionView)
+            return section
+        }
+    }
+
 }
 
 public extension SectionManager {
@@ -118,9 +122,11 @@ public extension SectionManager {
         let isEmpty = sections.isEmpty
         if sections.isEmpty || sections.count <= index {
             sections.append(section)
+            sections = calculator(sections: sections, in: sectionView)
             isEmpty ? sectionView.reloadData() : sectionView.insertSections(IndexSet([sections.count]))
         } else {
             sections.insert(section, at: index)
+            sections = calculator(sections: sections, in: sectionView)
             sectionView.insertSections(IndexSet([index]))
         }
     }
@@ -130,6 +136,7 @@ public extension SectionManager {
             sectionView.reloadData()
         } else {
             sections.remove(at: index)
+            sections = calculator(sections: sections, in: sectionView)
             sectionView.deleteSections(IndexSet([index]))
         }
     }

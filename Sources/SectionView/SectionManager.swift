@@ -54,8 +54,9 @@ public extension SectionManager {
     // MARK: - SectionProtocol
     
     /// 添加多组 SectionProtocol
-    func update(_ newSections: [SectionProtocol], animated: Bool = false) {
+    func update(_ newSections: SectionProtocol..., animated: Bool = false) {
         let isNeedUpdateSections = isNeedUpdate(sections: sections, with: newSections)
+        rebase(sections)
         sections = calculator(sections: newSections, in: sectionView)
 
         guard isNeedUpdateSections else {
@@ -70,11 +71,7 @@ public extension SectionManager {
             }
         }
     }
-    
-    /// 添加多组 SectionProtocol
-    func update(_ sections: SectionProtocol...) {
-        update(sections, animated: true)
-    }
+
 }
 
 private extension SectionManager {
@@ -90,6 +87,19 @@ private extension SectionManager {
         }
 
         return false
+    }
+
+    func rebase(_ sections: [SectionProtocol]) {
+        sections.forEach { rebase($0) }
+    }
+
+    func rebase(_ section: SectionProtocol) {
+        section.collectionView = nil
+        section.index = -1
+    }
+
+    func contains(section: SectionProtocol, in sections: [SectionProtocol]) -> Bool {
+        return sections.contains(where: { $0 === section })
     }
 
     func calculator(sections: [SectionProtocol], in sectionView: UICollectionView) -> [SectionProtocol] {
@@ -117,6 +127,9 @@ public extension SectionManager {
     }
     
     func insert(section: SectionProtocol, at index: Int) {
+        guard contains(section: section, in: sections) == false else {
+            return
+        }
         section.collectionView = sectionView
         section.index = index
         let isEmpty = sections.isEmpty
@@ -135,7 +148,7 @@ public extension SectionManager {
         if sections.isEmpty || sections.count <= index {
             sectionView.reloadData()
         } else {
-            sections.remove(at: index)
+            rebase(sections.remove(at: index))
             sections = calculator(sections: sections, in: sectionView)
             sectionView.deleteSections(IndexSet([index]))
         }

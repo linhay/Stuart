@@ -63,7 +63,7 @@ open class SectionHorizontalListCell: UICollectionViewCell {
     }
     
     open func config(section: SectionProtocol) {
-        self.manager.update([section])
+        self.manager.update(section)
     }
     
     private func initialize() {

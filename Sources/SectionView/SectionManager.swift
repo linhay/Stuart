@@ -34,15 +34,15 @@ fileprivate final class WeakBox<T: AnyObject> {
 
 public class SectionManager: NSObject {
     
-    private unowned var sectionView: UICollectionView
+    private weak var sectionView: UICollectionView?
     public private(set) var sections: [SectionProtocol] = []
     private var observeScrollStore: [String: WeakBox<UIScrollViewDelegate>] = [:]
 
     public init(sectionView: UICollectionView) {
         self.sectionView = sectionView
         super.init()
-        self.sectionView.delegate = self
-        self.sectionView.dataSource = self
+        self.sectionView?.delegate = self
+        self.sectionView?.dataSource = self
     }
     
 }
@@ -75,21 +75,16 @@ extension SectionManager {
         }
 
         /// 刷新 sections 的 index
-        self.sections.enumerated().forEach { [weak self] index, item in
-            guard let self = self else {
-                return
-            }
+        self.sections.enumerated().forEach { index, item in
             item.index = index
-            item.collectionView = self.sectionView
-            item.config(collectionView: self.sectionView)
         }
         
         if isNeedUpdateSections {
             if animated {
-                self.sectionView.reloadData()
+                self.sectionView?.reloadData()
             } else {
                 UIView.performWithoutAnimation {
-                    self.sectionView.reloadData()
+                    self.sectionView?.reloadData()
                 }
             }
         }
@@ -102,7 +97,7 @@ extension SectionManager {
 
     /// 刷新多组 Section
     public func refresh() {
-        sectionView.reloadData()
+        sectionView?.reloadData()
     }
 
     // MARK: - ObserveScroll
@@ -150,18 +145,12 @@ extension SectionManager: UICollectionViewDelegate, UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         return sections[indexPath.section].didSelectItem(at: indexPath)
     }
-
     public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if sourceIndexPath.section == destinationIndexPath.section {
-            sections[sourceIndexPath.section].move(from: sourceIndexPath, to: destinationIndexPath)
-        } else {
-            sections[sourceIndexPath.section].move(from: sourceIndexPath, to: destinationIndexPath)
-            sections[destinationIndexPath.section].move(from: sourceIndexPath, to: destinationIndexPath)
-        }
+        sections[sourceIndexPath.section].moveItem(from: sourceIndexPath, to: destinationIndexPath)
     }
 
     public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        return sections[indexPath.section].canMove(at: indexPath.item)
+        return sections[indexPath.section].canMove(at: indexPath)
     }
 }
 

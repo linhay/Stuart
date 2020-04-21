@@ -22,13 +22,11 @@
 
 import UIKit
 
-open class STSectionReusableView<Model>: UICollectionReusableView {
+protocol ConfigurableCell {
+    associatedtype Model
+    func config(_ model: Model)
+}
 
-    /// 首选 SectionReusableView 大小
-    /// - Parameter collectionView: 所在的 `collectionView`
-    /// - Parameter model: 配合计算的 model
-    open class func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize {
-        return .zero
-    }
-
+protocol ConfigurableCollectionCell: ConfigurableCell {
+    static func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize
 }

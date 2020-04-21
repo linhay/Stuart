@@ -22,7 +22,7 @@
 
 import UIKit
 
-open class STSectionFlowLayout: UICollectionViewFlowLayout {
+open class SectionCollectionFlowLayout: UICollectionViewFlowLayout {
     
     public enum ContentMode {
         /// 左对齐
@@ -69,7 +69,7 @@ open class STSectionFlowLayout: UICollectionViewFlowLayout {
 }
 
 // MARK: - Mode
-extension STSectionFlowLayout {
+extension SectionCollectionFlowLayout {
     
     private func modeHeaderAndFooterViewFitInset(collectionView: UICollectionView, attributes: [UICollectionViewLayoutAttributes]) -> [UICollectionViewLayoutAttributes]? {
         for item in attributes {
@@ -100,11 +100,14 @@ extension STSectionFlowLayout {
                     list.append(item)
                     continue
             }
-            
+
+            let insets = delegate.collectionView?(collectionView, layout: self, insetForSectionAt: item.indexPath.section) ?? .zero
+
             if let lastItem = lineStore[item.frame.minY]?.last {
                 item.frame.origin.x = lastItem.frame.maxX + minimumInteritemSpacing
                 lineStore[item.frame.minY]?.append(item)
             } else {
+                item.frame.origin.x = insets.left
                 lineStore[item.frame.minY] = [item]
             }
             list.append(item)

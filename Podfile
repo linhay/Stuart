@@ -1,9 +1,8 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '10.0'
+platform :ios, '11.0'
 project 'Template.xcodeproj'
 
 def setup_pod
-  use_frameworks!
   pod 'SnapKit'
   pod 'Stuart', :path => './Template.podspec'
   pod 'SwiftLint', :configurations => 'Debug'

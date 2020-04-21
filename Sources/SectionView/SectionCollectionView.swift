@@ -22,25 +22,18 @@
 
 import UIKit
 
-open class STSectionView: UICollectionView {
+open class SectionCollectionView: UICollectionView {
 
+    var sectionFlowLayout: SectionCollectionFlowLayout? { collectionViewLayout as? SectionCollectionFlowLayout }
     /// 滚动方向
     public var scrollDirection: UICollectionView.ScrollDirection? {
-        set {
-            (collectionViewLayout as? UICollectionViewFlowLayout)?.scrollDirection = newValue ?? UICollectionView.ScrollDirection.vertical
-        }
-        get {
-            return (collectionViewLayout as? UICollectionViewFlowLayout)?.scrollDirection
-        }
+        set { sectionFlowLayout?.scrollDirection = newValue ?? .vertical }
+        get { return sectionFlowLayout?.scrollDirection }
     }
     
-    public var layoutMode: STSectionFlowLayout.ContentMode {
-        set {
-            (collectionViewLayout as? STSectionFlowLayout)?.contentMode = newValue
-        }
-        get {
-            return (collectionViewLayout as? STSectionFlowLayout)?.contentMode ?? .none
-        }
+    public var layoutMode: SectionCollectionFlowLayout.ContentMode {
+        set { sectionFlowLayout?.contentMode = newValue }
+        get { sectionFlowLayout?.contentMode ?? .none }
     }
     
     public convenience init() {
@@ -48,7 +41,7 @@ open class STSectionView: UICollectionView {
     }
     
     public convenience init(frame: CGRect) {
-        self.init(frame: frame, collectionViewLayout: STSectionFlowLayout())
+        self.init(frame: frame, collectionViewLayout: SectionCollectionFlowLayout())
     }
     
     public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -58,13 +51,12 @@ open class STSectionView: UICollectionView {
     
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
-        collectionViewLayout = STSectionFlowLayout()
+        collectionViewLayout = SectionCollectionFlowLayout()
         initialize()
     }
     
     private func initialize() {
-
-        if backgroundColor == .some(UIColor.black) {
+        if backgroundColor == .black {
             backgroundColor = .white
         }
         

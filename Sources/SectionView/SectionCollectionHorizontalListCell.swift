@@ -22,22 +22,33 @@
 
 import UIKit
 
-open class STListViewController: UIViewController {
-    
-    public let listView  = STListView()
-    public lazy var manager = STListSectionManager(sectionView: listView)
+open class SectionCollectionHorizontalListCell: UICollectionViewCell {
 
-    public convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    public let sectionView = SectionCollectionView()
+    private(set) lazy var manager = SectionCollectionManager(sectionView: sectionView)
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initialize()
     }
-    
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        if view.backgroundColor == nil {
-            view.backgroundColor = .white
-        }
-        view.addSubview(listView)
-        listView.frame = view.bounds
+
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initialize()
     }
-    
+
+    open func config(section: SectionCollectionProtocol) {
+        self.manager.update(section)
+    }
+
+    private func initialize() {
+        contentView.addSubview(sectionView)
+        sectionView.scrollDirection = .horizontal
+        sectionView.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        sectionView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        sectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
+        sectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+    }
+
 }

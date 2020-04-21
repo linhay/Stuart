@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
     s.swift_version = "4.2"
     s.swift_versions = ['4.0', '4.2', '5.0']
 
-    s.ios.deployment_target = "10.0"
+    s.ios.deployment_target = "11.0"
 
     s.requires_arc = true
 

@@ -22,22 +22,18 @@
 
 import UIKit
 
-open class STSectionController: UIViewController {
-    
-    public let sectionView  = STSectionView()
-    public lazy var manager = STSectionManager(sectionView: sectionView)
+open class SectionCollectionItemCell<Model>: UICollectionViewCell {
 
-    public convenience init() {
-        self.init(nibName: nil, bundle: nil)
-    }
-    
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        if view.backgroundColor == nil {
-            view.backgroundColor = .white
-        }
-        view.addSubview(sectionView)
-        sectionView.frame = view.bounds
+    /// 首选cell大小
+    open class var preferredSize: CGSize {
+         return .zero
+     }
+
+    /// 首选cell大小
+    /// - Parameter collectionView: 所在的 `collectionView`
+    /// - Parameter model: 配合计算的 model
+    open class func preferredSize(collectionView: UICollectionView, model: Model? = nil) -> CGSize {
+        return .zero
     }
     
 }

@@ -22,33 +22,19 @@
 
 import UIKit
 
-open class STSectionHorizontalListCell: UICollectionViewCell {
-    
-    public let sectionView = STSectionView()
-    private(set) lazy var manager = STSectionManager(sectionView: sectionView)
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        initialize()
+open class SectionTableItemCell<Model>: UITableViewCell {
+
+    /// 首选cell大小
+    open class var preferredHeight: CGFloat {
+         return .zero
+     }
+
+    /// 首选cell大小
+    /// - Parameter collectionView: 所在的 `collectionView`
+    /// - Parameter model: 配合计算的 model
+    open class func preferredHeight(tableView: UITableView, model: Model? = nil) -> CGFloat {
+        return .zero
     }
-    
-    required public init?(coder: NSCoder) {
-        super.init(coder: coder)
-        initialize()
-    }
-    
-    open func config(section: STSectionProtocol) {
-        self.manager.update(section)
-    }
-    
-    private func initialize() {
-        contentView.addSubview(sectionView)
-        sectionView.scrollDirection = .horizontal
-        sectionView.translatesAutoresizingMaskIntoConstraints = false
-        sectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        sectionView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        sectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        sectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-    }
-    
+
 }
+

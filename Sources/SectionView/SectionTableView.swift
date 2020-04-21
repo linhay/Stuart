@@ -22,29 +22,10 @@
 
 import UIKit
 
-open class STListView: UITableView {
-    
-    public convenience init() {
-        self.init(frame: .zero)
-    }
-    
-    public override init(frame: CGRect, style: UITableView.Style) {
-        super.init(frame: frame, style: style)
-        initialize()
+open class SectionTableView: UITableView {
+
+   public convenience init() {
+        self.init(frame: .zero, style: .grouped)
     }
 
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        initialize()
-    }
-    
-    private func initialize() {
-        if backgroundColor == .some(UIColor.black) {
-            backgroundColor = .white
-        }
-        
-        showsVerticalScrollIndicator = false
-        showsHorizontalScrollIndicator = false
-    }
-    
 }

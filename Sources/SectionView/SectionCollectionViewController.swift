@@ -22,13 +22,22 @@
 
 import UIKit
 
-open class SectionItemCell<Model>: UITableViewCell {
+open class SectionCollectionViewController: UIViewController {
 
-    /// 首选cell大小
-    /// - Parameter collectionView: 所在的 `collectionView`
-    /// - Parameter model: 配合计算的 model
-    open class func preferredHeight(model: Model? = nil) -> CGFloat {
-        return .zero
+    public let sectionView  = SectionCollectionView()
+    public lazy var manager = SectionCollectionManager(sectionView: sectionView)
+
+    public convenience init() {
+        self.init(nibName: nil, bundle: nil)
     }
-    
+
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        if view.backgroundColor == nil {
+            view.backgroundColor = .white
+        }
+        view.addSubview(sectionView)
+        sectionView.frame = view.bounds
+    }
+
 }

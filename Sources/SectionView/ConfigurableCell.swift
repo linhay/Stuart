@@ -22,11 +22,15 @@
 
 import UIKit
 
-protocol ConfigurableCell {
+public protocol ConfigurableCell {
     associatedtype Model
     func config(_ model: Model)
 }
 
-protocol ConfigurableCollectionCell: ConfigurableCell {
+public protocol ConfigurableCollectionCell: ConfigurableCell {
     static func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize
+}
+
+public protocol ConfigurableTableCell: ConfigurableCell {
+    static func preferredHeight(model: Model?) -> CGFloat
 }

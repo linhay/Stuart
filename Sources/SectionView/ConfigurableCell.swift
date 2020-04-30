@@ -22,15 +22,22 @@
 
 import UIKit
 
-public protocol ConfigurableCell {
+public protocol ConfigurableCollectionCell: UIView {
     associatedtype Model
     func config(_ model: Model)
-}
-
-public protocol ConfigurableCollectionCell: ConfigurableCell {
     static func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize
 }
 
-public protocol ConfigurableTableCell: ConfigurableCell {
-    static func preferredHeight(model: Model?) -> CGFloat
+public extension ConfigurableCollectionCell where Model == Void {
+    func config(_ model: Model) { }
+}
+
+public protocol ConfigurableTableCell: UIView {
+    associatedtype Model
+    func config(_ model: Model)
+    static func preferredSize(collectionView: UITableView, model: Model?) -> CGSize
+}
+
+public extension ConfigurableTableCell where Model == Void {
+    func config(_ model: Model) { }
 }

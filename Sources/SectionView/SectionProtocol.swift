@@ -65,7 +65,7 @@ public extension SectionProtocol {
 }
 
 public extension SectionProtocol {
-    func didSelectItem(at indexPath: Int) { }
+    func didSelectItem(at index: Int) { }
     func canMove(at: Int) -> Bool { false }
     func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) { }
 }

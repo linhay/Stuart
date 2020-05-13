@@ -28,7 +28,7 @@ public protocol ConfigurableView: UIView {
     static func preferredSize(model: Model?) -> CGSize
 }
 
-public protocol ConfigurableCollectionCell: UICollectionViewCell {
+public protocol ConfigurableCollectionCell: UIView {
     associatedtype Model
     func config(_ model: Model)
     static func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize
@@ -38,7 +38,7 @@ public extension ConfigurableCollectionCell where Model == Void {
     func config(_ model: Model) { }
 }
 
-public protocol ConfigurableTableCell: UITableViewCell {
+public protocol ConfigurableTableCell: UIView {
     associatedtype Model
     func config(_ model: Model)
     static func preferredSize(tableView: UITableView, model: Model?) -> CGSize

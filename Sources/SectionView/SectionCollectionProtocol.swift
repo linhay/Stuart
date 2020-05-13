@@ -55,6 +55,18 @@ public extension SectionCollectionProtocol {
 
 public extension SectionCollectionProtocol {
 
+    func dequeue<T: UICollectionViewCell>(at index: Int, identifier: String = String(describing: T.self)) -> T {
+        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath(from: index)) as! T
+    }
+
+    func dequeue<T: UICollectionReusableView>(kind: SectionCollectionViewKind, identifier: String = String(describing: T.self)) -> T {
+        return collectionView.dequeueReusableSupplementaryView(ofKind: kind.rawValue, withReuseIdentifier: identifier, for: indexPath(from: index)) as! T
+    }
+
+}
+
+public extension SectionCollectionProtocol {
+
     func deselect(at index: Int, animated: Bool) {
         sectionView?.deselectItem(at: indexPath(from: index), animated: animated)
     }

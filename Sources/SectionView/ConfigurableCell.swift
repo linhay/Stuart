@@ -35,7 +35,7 @@ public extension ConfigurableCollectionCell where Model == Void {
 public protocol ConfigurableTableCell: UIView {
     associatedtype Model
     func config(_ model: Model)
-    static func preferredSize(collectionView: UITableView, model: Model?) -> CGSize
+    static func preferredSize(tableView: UITableView, model: Model?) -> CGSize
 }
 
 public extension ConfigurableTableCell where Model == Void {

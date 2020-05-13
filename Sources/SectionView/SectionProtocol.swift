@@ -25,6 +25,9 @@ import UIKit
 public class SectionCore {
     var index: Int = 0
     var sectionView: UIView?
+
+    internal init() { }
+
 }
 
 public protocol SectionProtocol: class {

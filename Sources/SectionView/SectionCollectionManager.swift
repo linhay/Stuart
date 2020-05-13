@@ -55,6 +55,10 @@ public extension SectionCollectionManager {
     }
 
     func update(_ sections: SectionCollectionProtocol...) {
+        update(sections)
+    }
+
+    func update(_ sections: [SectionCollectionProtocol]) {
         operational(sectionManager.update(sections))
         sections.forEach({ $0.config(sectionView: sectionView) })
     }

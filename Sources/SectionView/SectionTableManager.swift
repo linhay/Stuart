@@ -55,6 +55,10 @@ public extension SectionTableManager {
     }
 
     func update(_ sections: SectionTableProtocol..., with animation: UITableView.RowAnimation = .none) {
+        update(sections, with: animation)
+    }
+
+    func update(_ sections: [SectionTableProtocol], with animation: UITableView.RowAnimation = .none) {
         operational(sectionManager.update(sections), with: animation)
         sections.forEach({ $0.config(sectionView: sectionView) })
     }

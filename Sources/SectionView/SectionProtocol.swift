@@ -34,8 +34,8 @@ public protocol SectionProtocol: class {
     var core: SectionCore? { get set }
     var index: Int { get set }
     var itemCount: Int { get }
-    func didSelectItem(at index: Int)
-    func deselect(at index: Int, animated: Bool)
+    func didSelectItem(at row: Int)
+    func deselect(at row: Int, animated: Bool)
 
     func canMove(at: Int) -> Bool
     func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
@@ -68,7 +68,7 @@ public extension SectionProtocol {
 }
 
 public extension SectionProtocol {
-    func didSelectItem(at index: Int) { }
+    func didSelectItem(at row: Int) { }
     func canMove(at: Int) -> Bool { false }
     func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) { }
 }

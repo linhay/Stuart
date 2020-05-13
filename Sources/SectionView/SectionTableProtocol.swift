@@ -26,11 +26,11 @@ public protocol SectionTableProtocol: SectionProtocol {
     var headerHeight: CGFloat { get }
     var footerHeight: CGFloat { get }
     var sectionView: UITableView? { get }
-    func itemHeight(at index: Int) -> CGFloat
+    func itemHeight(at row: Int) -> CGFloat
     var headerView: UITableViewHeaderFooterView? { get }
     var footerView: UITableViewHeaderFooterView? { get }
     func config(sectionView: UITableView)
-    func item(at index: Int) -> UITableViewCell
+    func item(at row: Int) -> UITableViewCell
 }
 
 public extension SectionTableProtocol {
@@ -44,12 +44,24 @@ public extension SectionTableProtocol {
 
 public extension SectionTableProtocol {
 
-    func deselect(at index: Int, animated: Bool) {
-        sectionView?.deselectRow(at: indexPath(from: index), animated: animated)
+    func dequeue<T: UITableViewCell>(at row: Int, identifier: String = String(describing: T.self)) -> T {
+        return tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath(from: row)) as! T
     }
 
-    func cell(at index: Int) -> UITableViewCell? {
-        return sectionView?.cellForRow(at: indexPath(from: index))
+    func dequeue<T: UITableViewHeaderFooterView>(identifier: String = String(describing: T.self)) -> T {
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as! T
+    }
+
+}
+
+public extension SectionTableProtocol {
+
+    func deselect(at row: Int, animated: Bool) {
+        sectionView?.deselectRow(at: indexPath(from: row), animated: animated)
+    }
+
+    func cell(at row: Int) -> UITableViewCell? {
+        return sectionView?.cellForRow(at: indexPath(from: row))
     }
 
     func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
@@ -67,35 +79,35 @@ public extension SectionTableProtocol {
 
 public extension SectionTableProtocol {
 
-    func reload(at index: Int, with animation: UITableView.RowAnimation = .none) {
-        reload(at: [index], with: animation)
+    func reload(at row: Int, with animation: UITableView.RowAnimation = .none) {
+        reload(at: [row], with: animation)
     }
 
-    func reload(at indexs: [Int], with animation: UITableView.RowAnimation = .none) {
-        sectionView?.reloadRows(at: indexPaths(from: indexs), with: animation)
+    func reload(at rows: [Int], with animation: UITableView.RowAnimation = .none) {
+        sectionView?.reloadRows(at: indexPaths(from: rows), with: animation)
     }
 
 }
 
 public extension SectionTableProtocol {
 
-    func insert(at index: Int,
+    func insert(at row: Int,
                 with animation: UITableView.RowAnimation = .none,
                 willUpdate: (() -> Void)? = nil) {
-        insert(at: [index])
+        insert(at: [row])
     }
 
-    func insert(at indexs: [Int],
+    func insert(at rows: [Int],
                 with animation: UITableView.RowAnimation = .none,
                 willUpdate: (() -> Void)? = nil) {
-        guard indexs.isEmpty == false else {
+        guard rows.isEmpty == false else {
             return
         }
         willUpdate?()
-        if let max = indexs.max(), itemCount <= max {
+        if let max = rows.max(), itemCount <= max {
             sectionView?.reloadData()
         } else {
-            sectionView?.insertRows(at: indexPaths(from: indexs), with: animation)
+            sectionView?.insertRows(at: indexPaths(from: rows), with: animation)
         }
     }
 
@@ -103,19 +115,19 @@ public extension SectionTableProtocol {
 
 public extension SectionTableProtocol {
 
-    func delete(at index: Int, with animation: UITableView.RowAnimation = .none, willUpdate: (() -> Void)? = nil) {
-        delete(at: [index], willUpdate: willUpdate)
+    func delete(at row: Int, with animation: UITableView.RowAnimation = .none, willUpdate: (() -> Void)? = nil) {
+        delete(at: [row], willUpdate: willUpdate)
     }
 
-    func delete(at indexs: [Int], with animation: UITableView.RowAnimation = .none, willUpdate: (() -> Void)? = nil) {
-        guard indexs.isEmpty == false else {
+    func delete(at rows: [Int], with animation: UITableView.RowAnimation = .none, willUpdate: (() -> Void)? = nil) {
+        guard rows.isEmpty == false else {
             return
         }
         willUpdate?()
         if itemCount <= 0 {
             sectionView?.reloadData()
         } else {
-            sectionView?.deleteRows(at: indexPaths(from: indexs), with: animation)
+            sectionView?.deleteRows(at: indexPaths(from: rows), with: animation)
         }
     }
 

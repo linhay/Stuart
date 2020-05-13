@@ -32,8 +32,8 @@ public protocol SectionCollectionProtocol: SectionProtocol {
     var headerSize: CGSize { get }
     var footerSize: CGSize { get }
     func config(sectionView: UICollectionView)
-    func itemSize(at index: Int) -> CGSize
-    func item(at index: Int) -> UICollectionViewCell
+    func itemSize(at row: Int) -> CGSize
+    func item(at row: Int) -> UICollectionViewCell
 }
 
 public extension SectionCollectionProtocol {
@@ -55,24 +55,24 @@ public extension SectionCollectionProtocol {
 
 public extension SectionCollectionProtocol {
 
-    func dequeue<T: UICollectionViewCell>(at index: Int, identifier: String = String(describing: T.self)) -> T {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath(from: index)) as! T
+    func dequeue<T: UICollectionViewCell>(at row: Int, identifier: String = String(describing: T.self)) -> T {
+        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath(from: row)) as! T
     }
 
     func dequeue<T: UICollectionReusableView>(kind: SectionCollectionViewKind, identifier: String = String(describing: T.self)) -> T {
-        return collectionView.dequeueReusableSupplementaryView(ofKind: kind.rawValue, withReuseIdentifier: identifier, for: indexPath(from: index)) as! T
+        return collectionView.dequeueReusableSupplementaryView(ofKind: kind.rawValue, withReuseIdentifier: identifier, for: IndexPath(row: 0, section: index)) as! T
     }
 
 }
 
 public extension SectionCollectionProtocol {
 
-    func deselect(at index: Int, animated: Bool) {
-        sectionView?.deselectItem(at: indexPath(from: index), animated: animated)
+    func deselect(at row: Int, animated: Bool) {
+        sectionView?.deselectItem(at: indexPath(from: row), animated: animated)
     }
 
-    func cell(at index: Int) -> UICollectionViewCell? {
-        return sectionView?.cellForItem(at: indexPath(from: index))
+    func cell(at row: Int) -> UICollectionViewCell? {
+        return sectionView?.cellForItem(at: indexPath(from: row))
     }
 
     func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
@@ -83,31 +83,31 @@ public extension SectionCollectionProtocol {
 
 public extension SectionCollectionProtocol {
 
-    func reload(at index: Int) {
-        reload(at: [index])
+    func reload(at row: Int) {
+        reload(at: [row])
     }
 
-    func reload(at indexs: [Int]) {
-        sectionView?.reloadItems(at: indexPaths(from: indexs))
+    func reload(at rows: [Int]) {
+        sectionView?.reloadItems(at: indexPaths(from: rows))
     }
 
 }
 
 public extension SectionCollectionProtocol {
 
-    func insert(at index: Int, willUpdate: (() -> Void)? = nil) {
-        insert(at: [index])
+    func insert(at row: Int, willUpdate: (() -> Void)? = nil) {
+        insert(at: [row])
     }
 
-    func insert(at indexs: [Int], willUpdate: (() -> Void)? = nil) {
-        guard indexs.isEmpty == false else {
+    func insert(at rows: [Int], willUpdate: (() -> Void)? = nil) {
+        guard rows.isEmpty == false else {
             return
         }
         willUpdate?()
-        if let max = indexs.max(), itemCount <= max {
+        if let max = rows.max(), itemCount <= max {
             sectionView?.reloadData()
         } else {
-            sectionView?.insertItems(at: indexPaths(from: indexs))
+            sectionView?.insertItems(at: indexPaths(from: rows))
         }
     }
 
@@ -115,19 +115,19 @@ public extension SectionCollectionProtocol {
 
 public extension SectionCollectionProtocol {
 
-    func delete(at index: Int, willUpdate: (() -> Void)? = nil) {
-        delete(at: [index], willUpdate: willUpdate)
+    func delete(at row: Int, willUpdate: (() -> Void)? = nil) {
+        delete(at: [row], willUpdate: willUpdate)
     }
 
-    func delete(at indexs: [Int], willUpdate: (() -> Void)? = nil) {
-        guard indexs.isEmpty == false else {
+    func delete(at rows: [Int], willUpdate: (() -> Void)? = nil) {
+        guard rows.isEmpty == false else {
             return
         }
         willUpdate?()
         if itemCount <= 0 {
             sectionView?.reloadData()
         } else {
-            sectionView?.deleteItems(at: indexPaths(from: indexs))
+            sectionView?.deleteItems(at: indexPaths(from: rows))
         }
     }
 
@@ -135,12 +135,12 @@ public extension SectionCollectionProtocol {
 
 public extension SectionCollectionProtocol {
 
-    func scroll(to index: Int, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
-        sectionView?.scrollToItem(at: indexPath(from: index), at: scrollPosition, animated: animated)
+    func scroll(to row: Int, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+        sectionView?.scrollToItem(at: indexPath(from: row), at: scrollPosition, animated: animated)
     }
 
-    func select(at index: Int?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition) {
-        sectionView?.selectItem(at: indexPath(from: index), animated: animated, scrollPosition: scrollPosition)
+    func select(at row: Int?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition) {
+        sectionView?.selectItem(at: indexPath(from: row), animated: animated, scrollPosition: scrollPosition)
     }
 
 }

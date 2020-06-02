@@ -24,11 +24,18 @@ import UIKit
 
 open class SectionTableViewController: UIViewController {
 
-    public let sectionView = SectionTableView()
-    public lazy var manager = SectionTableManager(sectionView: sectionView)
+    open lazy var sectionView = SectionTableView(frame: .zero, style: style)
+    open lazy var manager = SectionTableManager(sectionView: sectionView)
+    private let style: UITableView.Style
 
-    public convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    public init(style: UITableView.Style = .grouped) {
+        self.style = style
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    public required init?(coder: NSCoder) {
+        self.style = .plain
+        super.init(coder: coder)
     }
 
     open override func viewDidLoad() {

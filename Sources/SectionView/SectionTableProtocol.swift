@@ -79,10 +79,24 @@ public extension SectionTableProtocol {
 
 public extension SectionTableProtocol {
 
+    /// 刷新整组元素
+    /// - Parameter animation: 动画
+    func reload(with animation: UITableView.RowAnimation = .none) {
+        sectionView?.reloadSections(.init(integer: index), with: animation)
+    }
+
+    /// 刷新单个元素
+    /// - Parameters:
+    ///   - row: 序号
+    ///   - animation: 动画
     func reload(at row: Int, with animation: UITableView.RowAnimation = .none) {
         reload(at: [row], with: animation)
     }
 
+    /// 刷新多个元素
+    /// - Parameters:
+    ///   - row: 序号
+    ///   - animation: 动画
     func reload(at rows: [Int], with animation: UITableView.RowAnimation = .none) {
         sectionView?.reloadRows(at: indexPaths(from: rows), with: animation)
     }

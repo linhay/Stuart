@@ -83,6 +83,10 @@ public extension SectionCollectionProtocol {
 
 public extension SectionCollectionProtocol {
 
+    func reload() {
+        sectionView?.reloadSections(IndexSet(integer: index))
+    }
+
     func reload(at row: Int) {
         reload(at: [row])
     }

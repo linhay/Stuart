@@ -37,7 +37,25 @@ open class SectionCollectionViewController: UIViewController {
             view.backgroundColor = .white
         }
         view.addSubview(sectionView)
-        sectionView.frame = view.bounds
+        view.addSubview(sectionView)
+        let safeArea = view.safeAreaLayoutGuide
+        sectionView.translatesAutoresizingMaskIntoConstraints = false
+        layout(anchor1: sectionView.topAnchor, anchor2: safeArea.topAnchor)
+        layout(anchor1: sectionView.bottomAnchor, anchor2: safeArea.bottomAnchor)
+        layout(anchor1: sectionView.rightAnchor, anchor2: safeArea.rightAnchor)
+        layout(anchor1: sectionView.leftAnchor, anchor2: safeArea.leftAnchor)
+    }
+
+    private func layout(anchor1: NSLayoutYAxisAnchor, anchor2: NSLayoutYAxisAnchor) {
+        let constraint = anchor1.constraint(equalTo: anchor2)
+        constraint.priority = .defaultLow
+        constraint.isActive = true
+    }
+
+    private func layout(anchor1: NSLayoutXAxisAnchor, anchor2: NSLayoutXAxisAnchor) {
+        let constraint = anchor1.constraint(equalTo: anchor2)
+        constraint.priority = .defaultLow
+        constraint.isActive = true
     }
 
 }

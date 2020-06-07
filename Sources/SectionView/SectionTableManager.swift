@@ -97,6 +97,10 @@ extension SectionTableManager: UITableViewDelegate, UITableViewDataSource {
         return sections[section].headerView
     }
 
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return sections[section].headerHeight
+    }
+
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return sections[indexPath.section].itemHeight(at: indexPath.item)
     }

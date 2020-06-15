@@ -37,7 +37,6 @@ open class SectionCollectionViewController: UIViewController {
             view.backgroundColor = .white
         }
         view.addSubview(sectionView)
-        view.addSubview(sectionView)
         let safeArea = view.safeAreaLayoutGuide
         sectionView.translatesAutoresizingMaskIntoConstraints = false
         layout(anchor1: sectionView.topAnchor, anchor2: safeArea.topAnchor)

@@ -24,7 +24,7 @@ import UIKit
 
 public class SectionScrollManager: NSObject, UIScrollViewDelegate {
     
-    private var observeScrollStore: [String: WeakBox<UIScrollViewDelegate>] = [:]
+    private var observeScrollStore: [String: SectionWeakBox<UIScrollViewDelegate>] = [:]
     
 }
 
@@ -32,7 +32,7 @@ public extension SectionScrollManager {
     
     // MARK: - ObserveScroll
     func addObserveScroll(target: NSObject & UIScrollViewDelegate) {
-        observeScrollStore[target.self.description] = WeakBox(target)
+        observeScrollStore[target.self.description] = SectionWeakBox(target)
     }
     
     func addObserveScroll(targets: [NSObject & UIScrollViewDelegate]) {

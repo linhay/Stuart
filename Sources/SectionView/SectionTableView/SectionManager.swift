@@ -39,6 +39,11 @@ public class SectionManager<SectionView: UIView> {
         case move(from: Int, to: Int)
     }
 
+    func reload() -> Refresh {
+        rebase(sections)
+        return .reload
+    }
+
     func update(_ newSections: [SectionProtocol]) -> Refresh {
         let isNeedUpdateSections = isNeedUpdate(sections: sections, with: newSections)
         rebase(sections)

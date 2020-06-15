@@ -54,6 +54,10 @@ public extension SectionTableManager {
         }
     }
 
+    func reload() {
+        operational(sectionManager.reload(), with: .none)
+    }
+
     func update(_ sections: SectionTableProtocol..., with animation: UITableView.RowAnimation = .none) {
         update(sections, with: animation)
     }

@@ -22,7 +22,7 @@
 
 import UIKit
 
-final class WeakBox<T: AnyObject> {
+final class SectionWeakBox<T: AnyObject> {
 
     weak var value: T?
 

@@ -29,4 +29,9 @@ Pod::Spec.new do |s|
         sp.source_files  = ["Sources/SectionView/*.swift", "Sources/SectionView/**/*.swift"]
     end
 
+    s.subspec "Configurable" do |sp|
+        sp.frameworks = "UIKit"
+        sp.source_files  = ["Sources/Configurable/*.swift", "Sources/Configurable/**/*.swift"]
+    end
+
 end

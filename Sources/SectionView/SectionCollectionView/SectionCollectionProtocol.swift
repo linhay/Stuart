@@ -1,9 +1,24 @@
-//
-//  SectionCollectionProtocol.swift
-//  iDxyer
-//
-//  Created by 林翰 on 2020/6/12.
-//
+/// MIT License
+///
+/// Copyright (c) 2020 linhey
+///
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+///
+/// The above copyright notice and this permission notice shall be included in all
+/// copies or substantial portions of the Software.
+
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+/// SOFTWARE.
 
 import UIKit
 
@@ -11,7 +26,7 @@ public protocol SectionCollectionProtocol: SectionProtocol {
     var minimumLineSpacing: CGFloat { get }
     var minimumInteritemSpacing: CGFloat { get }
     var sectionInset: UIEdgeInsets { get  }
-    var sectionView: UICollectionView? { get }
+    var sectionView: UICollectionView { get }
     var headerView: UICollectionReusableView? { get }
     var footerView: UICollectionReusableView? { get }
     var headerSize: CGSize { get }
@@ -27,8 +42,13 @@ public extension SectionCollectionProtocol {
     var footerView: UICollectionReusableView? { nil }
     var headerSize: CGSize { .zero }
     var footerSize: CGSize { .zero }
-    var sectionView: UICollectionView? { return core?.sectionView as? UICollectionView }
-    var collectionView: UICollectionView { core?.sectionView as! UICollectionView }
+    var sectionView: UICollectionView {
+        guard let core = core else {
+            assertionFailure("can't find sectionView, before `SectionCollectionProtocol` into `Manager`")
+            return UICollectionView()
+        }
+        return core.sectionView as! UICollectionView
+    }
 
 }
 
@@ -41,11 +61,11 @@ public extension SectionCollectionProtocol {
 public extension SectionCollectionProtocol {
 
     func dequeue<T: UICollectionViewCell>(at row: Int, identifier: String = String(describing: T.self)) -> T {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath(from: row)) as! T
+        return sectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath(from: row)) as! T
     }
 
     func dequeue<T: UICollectionReusableView>(kind: SectionCollectionViewKind, identifier: String = String(describing: T.self)) -> T {
-        return collectionView.dequeueReusableSupplementaryView(ofKind: kind.rawValue, withReuseIdentifier: identifier, for: IndexPath(row: 0, section: index)) as! T
+        return sectionView.dequeueReusableSupplementaryView(ofKind: kind.rawValue, withReuseIdentifier: identifier, for: IndexPath(row: 0, section: index)) as! T
     }
 
 }
@@ -53,22 +73,22 @@ public extension SectionCollectionProtocol {
 public extension SectionCollectionProtocol {
 
     func deselect(at row: Int, animated: Bool) {
-        sectionView?.deselectItem(at: indexPath(from: row), animated: animated)
+        sectionView.deselectItem(at: indexPath(from: row), animated: animated)
     }
 
     func cell(at row: Int) -> UICollectionViewCell? {
-        return sectionView?.cellForItem(at: indexPath(from: row))
+        return sectionView.cellForItem(at: indexPath(from: row))
     }
 
     func row(for cell: UICollectionViewCell) -> Int? {
-        guard let indexPath = sectionView?.indexPath(for: cell), indexPath.section == core?.index else {
+        guard let indexPath = sectionView.indexPath(for: cell), indexPath.section == core?.index else {
             return nil
         }
         return indexPath.row
     }
 
     func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
-        sectionView?.performBatchUpdates(updates, completion: completion)
+        sectionView.performBatchUpdates(updates, completion: completion)
     }
 
 }
@@ -76,7 +96,7 @@ public extension SectionCollectionProtocol {
 public extension SectionCollectionProtocol {
 
     func reload() {
-        sectionView?.reloadData()
+        sectionView.reloadData()
     }
 
     func reload(at row: Int) {
@@ -84,7 +104,7 @@ public extension SectionCollectionProtocol {
     }
 
     func reload(at rows: [Int]) {
-        sectionView?.reloadData()
+        sectionView.reloadData()
     }
 
 }
@@ -100,10 +120,10 @@ public extension SectionCollectionProtocol {
             return
         }
         willUpdate?()
-        if let max = rows.max(), (sectionView?.numberOfItems(inSection: index) ?? 0) <= max {
-            sectionView?.reloadData()
+        if let max = rows.max(), sectionView.numberOfItems(inSection: index) <= max {
+            sectionView.reloadData()
         } else {
-            sectionView?.insertItems(at: indexPaths(from: rows))
+            sectionView.insertItems(at: indexPaths(from: rows))
         }
     }
 
@@ -121,9 +141,9 @@ public extension SectionCollectionProtocol {
         }
         willUpdate?()
         if itemCount <= 0 {
-            sectionView?.reloadData()
+            sectionView.reloadData()
         } else {
-            sectionView?.deleteItems(at: indexPaths(from: rows))
+            sectionView.deleteItems(at: indexPaths(from: rows))
         }
     }
 
@@ -132,11 +152,11 @@ public extension SectionCollectionProtocol {
 public extension SectionCollectionProtocol {
 
     func scroll(to row: Int, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
-        sectionView?.scrollToItem(at: indexPath(from: row), at: scrollPosition, animated: animated)
+        sectionView.scrollToItem(at: indexPath(from: row), at: scrollPosition, animated: animated)
     }
 
     func select(at row: Int?, animated: Bool, scrollPosition: UICollectionView.ScrollPosition) {
-        sectionView?.selectItem(at: indexPath(from: row), animated: animated, scrollPosition: scrollPosition)
+        sectionView.selectItem(at: indexPath(from: row), animated: animated, scrollPosition: scrollPosition)
     }
 
 }

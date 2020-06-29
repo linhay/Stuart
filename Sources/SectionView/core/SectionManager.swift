@@ -40,22 +40,19 @@ public class SectionManager<SectionView: UIView> {
     }
 
     func reload() -> Refresh {
-        rebase(sections)
+        _ = calculator(sections: sections, in: sectionView)
         return .reload
     }
 
     func update(_ newSections: [SectionProtocol]) -> Refresh {
-        let isNeedUpdateSections = isNeedUpdate(sections: sections, with: newSections)
-        rebase(sections)
         sections = calculator(sections: newSections, in: sectionView)
-        return isNeedUpdateSections ? .none : .reload
+        return .reload
     }
 
     func delete(at index: Int) -> Refresh {
         if sections.isEmpty || sections.count <= index {
             return .reload
         } else {
-            rebase(sections.remove(at: index))
             sections = calculator(sections: sections, in: sectionView)
             return .delete(IndexSet([index]))
         }
@@ -73,10 +70,6 @@ public class SectionManager<SectionView: UIView> {
             return .none
         }
 
-        rebase(section)
-        section.core?.sectionView = sectionView
-        section.core?.index = index
-
         let isEmpty = sections.isEmpty
         if sections.isEmpty || sections.count <= index {
             sections.append(section)
@@ -91,21 +84,7 @@ public class SectionManager<SectionView: UIView> {
 
 }
 
-// MARK: - public api
 private extension SectionManager {
-
-    /// 是否需要重新设置 sections
-    func isNeedUpdate(sections sections1: [SectionProtocol], with sections2: [SectionProtocol]) -> Bool {
-        guard sections1.count == sections2.count else {
-            return true
-        }
-
-        for index in 0..<sections1.count where sections1[index] !== sections2[index] {
-            return true
-        }
-
-        return false
-    }
 
     func rebase(_ sections: [SectionProtocol]) {
         sections.forEach { rebase($0) }

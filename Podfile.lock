@@ -1,7 +1,9 @@
 PODS:
   - SnapKit (5.0.1)
   - Stuart (0.0.1):
+    - Stuart/Configurable (= 0.0.1)
     - Stuart/SectionView (= 0.0.1)
+  - Stuart/Configurable (0.0.1)
   - Stuart/SectionView (0.0.1)
   - SwiftLint (0.38.1)
 
@@ -21,7 +23,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  Stuart: 08d2f1b29f8f077a6aa222e4cf89075b51e88b17
+  Stuart: 59481afc2b60a9d5da6234647e72e62b79817205
   SwiftLint: 0aeb99ca7ccfc222ef93e2560a35e669f5465e6c
 
 PODFILE CHECKSUM: 632769abbfaf14b2326e002611f4ebb281318004

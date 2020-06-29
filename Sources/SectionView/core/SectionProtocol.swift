@@ -22,28 +22,45 @@
 
 import UIKit
 
-public protocol ConfigurableView: UIView {
-    associatedtype Model
-    func config(_ model: Model)
-    static func preferredSize(model: Model?) -> CGSize
+public protocol SectionProtocol: class {
+    var core: SectionCore? { get set }
+    var index: Int { get set }
+    var itemCount: Int { get }
+    func didSelectItem(at row: Int)
+    func deselect(at row: Int, animated: Bool)
+
+    func canMove(at: Int) -> Bool
+    func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?)
 }
 
-public protocol ConfigurableCollectionCell: UIView {
-    associatedtype Model
-    func config(_ model: Model)
-    static func preferredSize(collectionView: UICollectionView, model: Model?) -> CGSize
+public extension SectionProtocol {
+
+    var index: Int {
+        set { core?.index = newValue }
+        get { core?.index ?? 0 }
+    }
+
 }
 
-public extension ConfigurableCollectionCell where Model == Void {
-    func config(_ model: Model) { }
+public extension SectionProtocol {
+
+    func indexPath(from value: Int?) -> IndexPath? {
+        return value.map({ IndexPath(item: $0, section: index) })
+    }
+
+    func indexPath(from value: Int) -> IndexPath {
+        return IndexPath(item: value, section: index)
+    }
+
+    func indexPaths(from value: [Int]) -> [IndexPath] {
+        return value.map({ IndexPath(item: $0, section: index) })
+    }
+
 }
 
-public protocol ConfigurableTableCell: UIView {
-    associatedtype Model
-    func config(_ model: Model)
-    static func preferredSize(tableView: UITableView, model: Model?) -> CGSize
-}
-
-public extension ConfigurableTableCell where Model == Void {
-    func config(_ model: Model) { }
+public extension SectionProtocol {
+    func didSelectItem(at row: Int) { }
+    func canMove(at: Int) -> Bool { false }
+    func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) { }
 }

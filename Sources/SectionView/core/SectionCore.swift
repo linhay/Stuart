@@ -27,48 +27,4 @@ public class SectionCore {
     var sectionView: UIView?
 
     internal init() { }
-
-}
-
-public protocol SectionProtocol: class {
-    var core: SectionCore? { get set }
-    var index: Int { get set }
-    var itemCount: Int { get }
-    func didSelectItem(at row: Int)
-    func deselect(at row: Int, animated: Bool)
-
-    func canMove(at: Int) -> Bool
-    func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
-    func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?)
-}
-
-public extension SectionProtocol {
-
-    var index: Int {
-        set { core?.index = newValue }
-        get { core?.index ?? 0 }
-    }
-
-}
-
-public extension SectionProtocol {
-
-    func indexPath(from value: Int?) -> IndexPath? {
-        return value.map({ IndexPath(item: $0, section: index) })
-    }
-
-    func indexPath(from value: Int) -> IndexPath {
-        return IndexPath(item: value, section: index)
-    }
-
-    func indexPaths(from value: [Int]) -> [IndexPath] {
-        return value.map({ IndexPath(item: $0, section: index) })
-    }
-
-}
-
-public extension SectionProtocol {
-    func didSelectItem(at row: Int) { }
-    func canMove(at: Int) -> Bool { false }
-    func move(from sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) { }
 }

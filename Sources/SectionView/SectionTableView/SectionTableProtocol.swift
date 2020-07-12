@@ -25,7 +25,7 @@ import UIKit
 public protocol SectionTableProtocol: SectionProtocol {
     var headerHeight: CGFloat { get }
     var footerHeight: CGFloat { get }
-    var sectionView: UITableView? { get }
+    var sectionView: UITableView { get }
     func itemHeight(at row: Int) -> CGFloat
     var headerView: UITableViewHeaderFooterView? { get }
     var footerView: UITableViewHeaderFooterView? { get }

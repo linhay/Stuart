@@ -41,6 +41,8 @@ public extension SectionProtocol {
         get { core?.index ?? 0 }
     }
 
+    var isLoaded: Bool { core != nil }
+
 }
 
 public extension SectionProtocol {

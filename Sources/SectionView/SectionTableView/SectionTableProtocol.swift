@@ -38,18 +38,23 @@ public extension SectionTableProtocol {
     var footerHeight: CGFloat { 0 }
     var headerView: UITableViewHeaderFooterView? { nil }
     var footerView: UITableViewHeaderFooterView? { nil }
-    var sectionView: UITableView? { core?.sectionView as? UITableView }
-    var tableView: UITableView { core?.sectionView as! UITableView }
+    var sectionView: UITableView {
+        guard let core = core else {
+            assertionFailure("can't find sectionView, before `SectionCollectionProtocol` into `Manager`")
+            return UITableView()
+        }
+        return core.sectionView as! UITableView
+    }
 }
 
 public extension SectionTableProtocol {
 
     func dequeue<T: UITableViewCell>(at row: Int, identifier: String = String(describing: T.self)) -> T {
-        return tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath(from: row)) as! T
+        return sectionView.dequeueReusableCell(withIdentifier: identifier, for: indexPath(from: row)) as! T
     }
 
     func dequeue<T: UITableViewHeaderFooterView>(identifier: String = String(describing: T.self)) -> T {
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as! T
+        return sectionView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as! T
     }
 
 }
@@ -57,20 +62,20 @@ public extension SectionTableProtocol {
 public extension SectionTableProtocol {
 
     func deselect(at row: Int, animated: Bool) {
-        sectionView?.deselectRow(at: indexPath(from: row), animated: animated)
+        sectionView.deselectRow(at: indexPath(from: row), animated: animated)
     }
 
     func cell(at row: Int) -> UITableViewCell? {
-        return sectionView?.cellForRow(at: indexPath(from: row))
+        return sectionView.cellForRow(at: indexPath(from: row))
     }
 
     func pick(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?) {
         if #available(iOS 11.0, *) {
-            sectionView?.performBatchUpdates(updates, completion: completion)
+            sectionView.performBatchUpdates(updates, completion: completion)
         } else {
-            sectionView?.beginUpdates()
+            sectionView.beginUpdates()
             updates?()
-            sectionView?.endUpdates()
+            sectionView.endUpdates()
             completion?(true)
         }
     }
@@ -82,7 +87,7 @@ public extension SectionTableProtocol {
     /// 刷新整组元素
     /// - Parameter animation: 动画
     func reload(with animation: UITableView.RowAnimation = .none) {
-        sectionView?.reloadSections(.init(integer: index), with: animation)
+        sectionView.reloadSections(.init(integer: index), with: animation)
     }
 
     /// 刷新单个元素
@@ -98,7 +103,7 @@ public extension SectionTableProtocol {
     ///   - row: 序号
     ///   - animation: 动画
     func reload(at rows: [Int], with animation: UITableView.RowAnimation = .none) {
-        sectionView?.reloadRows(at: indexPaths(from: rows), with: animation)
+        sectionView.reloadRows(at: indexPaths(from: rows), with: animation)
     }
 
 }
@@ -119,9 +124,9 @@ public extension SectionTableProtocol {
         }
         willUpdate?()
         if let max = rows.max(), itemCount <= max {
-            sectionView?.reloadData()
+            sectionView.reloadData()
         } else {
-            sectionView?.insertRows(at: indexPaths(from: rows), with: animation)
+            sectionView.insertRows(at: indexPaths(from: rows), with: animation)
         }
     }
 
@@ -139,9 +144,9 @@ public extension SectionTableProtocol {
         }
         willUpdate?()
         if itemCount <= 0 {
-            sectionView?.reloadData()
+            sectionView.reloadData()
         } else {
-            sectionView?.deleteRows(at: indexPaths(from: rows), with: animation)
+            sectionView.deleteRows(at: indexPaths(from: rows), with: animation)
         }
     }
 

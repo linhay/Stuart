@@ -96,6 +96,9 @@ public extension SectionCollectionProtocol {
 public extension SectionCollectionProtocol {
 
     func reload() {
+        guard isLoaded else {
+            return
+        }
         sectionView.reloadData()
     }
 
@@ -104,6 +107,9 @@ public extension SectionCollectionProtocol {
     }
 
     func reload(at rows: [Int]) {
+        guard isLoaded else {
+            return
+        }
         sectionView.reloadData()
     }
 
